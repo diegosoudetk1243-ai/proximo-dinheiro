@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
 import { Route as AuthenticatedFluxoRouteImport } from './routes/_authenticated/fluxo'
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
+import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,6 +25,12 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedConfiguracoesRoute =
+  AuthenticatedConfiguracoesRouteImport.update({
+    id: '/configuracoes',
+    path: '/configuracoes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedFluxoRoute = AuthenticatedFluxoRouteImport.update({
   id: '/fluxo',
   path: '/fluxo',
@@ -33,35 +41,49 @@ const AuthenticatedInicioRoute = AuthenticatedInicioRouteImport.update({
   path: '/inicio',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMovimentacoesRoute =
+  AuthenticatedMovimentacoesRouteImport.update({
+    id: '/movimentacoes',
+    path: '/movimentacoes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/fluxo': typeof AuthenticatedFluxoRoute
   '/inicio': typeof AuthenticatedInicioRoute
+  '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/fluxo': typeof AuthenticatedFluxoRoute
   '/inicio': typeof AuthenticatedInicioRoute
+  '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/_authenticated/fluxo': typeof AuthenticatedFluxoRoute
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
+  '/_authenticated/movimentacoes': typeof AuthenticatedMovimentacoesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/fluxo' | '/inicio'
+  fullPaths: '/' | '/configuracoes' | '/fluxo' | '/inicio' | '/movimentacoes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/fluxo' | '/inicio'
+  to: '/' | '/configuracoes' | '/fluxo' | '/inicio' | '/movimentacoes'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/_authenticated/configuracoes'
     | '/_authenticated/fluxo'
     | '/_authenticated/inicio'
+    | '/_authenticated/movimentacoes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -85,6 +107,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/configuracoes': {
+      id: '/_authenticated/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof AuthenticatedConfiguracoesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/fluxo': {
       id: '/_authenticated/fluxo'
       path: '/fluxo'
@@ -99,17 +128,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInicioRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/movimentacoes': {
+      id: '/_authenticated/movimentacoes'
+      path: '/movimentacoes'
+      fullPath: '/movimentacoes'
+      preLoaderRoute: typeof AuthenticatedMovimentacoesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
   AuthenticatedFluxoRoute: typeof AuthenticatedFluxoRoute
   AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
+  AuthenticatedMovimentacoesRoute: typeof AuthenticatedMovimentacoesRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
   AuthenticatedFluxoRoute: AuthenticatedFluxoRoute,
   AuthenticatedInicioRoute: AuthenticatedInicioRoute,
+  AuthenticatedMovimentacoesRoute: AuthenticatedMovimentacoesRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
