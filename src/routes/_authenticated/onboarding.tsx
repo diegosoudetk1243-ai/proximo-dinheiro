@@ -15,7 +15,7 @@ import type { MovementType } from "@/lib/projection";
 export const Route = createFileRoute("/_authenticated/onboarding")({
   head: () => ({
     meta: [
-      { title: "配Configurar seu caixa — Fluxo App".replace("配", "") },
+      { title: "Configurar seu caixa — Fluxo App" },
       { name: "description", content: "Configure seu caixa em poucos passos." },
       { property: "og:title", content: "Configurar seu caixa — Fluxo App" },
       { property: "og:description", content: "Saldo atual, o que vai entrar e o que vai sair." },

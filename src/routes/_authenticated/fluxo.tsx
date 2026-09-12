@@ -26,7 +26,6 @@ export const Route = createFileRoute("/_authenticated/fluxo")({
   ),
 });
 
-export default function noop() {}
 
 function Fluxo() {
   const { data, isLoading } = useFluxo();
