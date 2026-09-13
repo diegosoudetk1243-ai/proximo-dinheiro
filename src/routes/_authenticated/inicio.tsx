@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, Plus } from "lucide-react";
+import { AlertTriangle, ArrowDownLeft, ArrowUpRight, CalendarDays, Plus, Wallet } from "lucide-react";
 
 import { AppShell, useMovementDialog } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -64,16 +64,36 @@ function Dashboard() {
   const next = projection.future.slice(0, 6);
 
   return (
-    <div className="space-y-5">
-      <section className="surface p-6">
-        <p className="text-sm text-muted-foreground">Caixa atual</p>
-        <p className="num mt-1 text-4xl font-bold">{formatBRL(projection.currentBalance)}</p>
-        <p className="mt-1 text-sm text-muted-foreground">Disponível agora</p>
-      </section>
+    <div className="space-y-6">
+      <header>
+        <p className="eyebrow">Resumo do seu caixa</p>
+        <h1 className="mt-2 text-2xl font-semibold md:text-3xl">Quanto você tem hoje e no futuro</h1>
+      </header>
 
-      <section className="surface p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-muted-foreground">Caixa previsto</p>
+      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+        <div className="relative overflow-hidden rounded-xl border border-primary/20 bg-sidebar p-6 shadow-soft md:p-7">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Caixa atual</p>
+              <p className="num font-display mt-3 text-3xl font-semibold text-foreground sm:text-4xl">
+                {formatBRL(projection.currentBalance)}
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">Disponível agora</p>
+            </div>
+            <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+              <Wallet className="size-5" />
+            </span>
+          </div>
+        </div>
+
+        <div className="panel p-6 md:p-7">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-muted-foreground">Caixa previsto</p>
+              <p className="num font-display mt-3 text-3xl font-semibold sm:text-4xl">
+                {formatBRL(projection.projectedBalance)}
+              </p>
+            </div>
           <div className="flex rounded-full bg-muted p-1">
             {HORIZONS.map((option) => (
               <button
@@ -81,7 +101,7 @@ function Dashboard() {
                 type="button"
                 onClick={() => setDays(option)}
                 className={cn(
-                  "rounded-full px-3 py-1.5 text-xs font-medium transition",
+                    "rounded-full px-3 py-1.5 text-xs font-semibold transition",
                   days === option ? "bg-card text-foreground shadow-sm" : "text-muted-foreground",
                 )}
               >
@@ -89,38 +109,31 @@ function Dashboard() {
               </button>
             ))}
           </div>
+          </div>
         </div>
-
-        <p
-          className={cn(
-            "num mt-2 text-4xl font-bold",
-            projection.projectedBalance < 0 && "text-destructive",
-          )}
-        >
-          {formatBRL(projection.projectedBalance)}
-        </p>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-2 text-sm text-muted-foreground">
           Previsão para os próximos {days} dias
         </p>
-
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-success/10 p-4">
-            <p className="text-xs text-muted-foreground">Vai entrar</p>
-            <p className="num mt-1 text-lg font-semibold text-success">
-              + {formatBRL(projection.incomingTotal)}
-            </p>
-          </div>
-          <div className="rounded-2xl bg-destructive/10 p-4">
-            <p className="text-xs text-muted-foreground">Vai sair</p>
-            <p className="num mt-1 text-lg font-semibold text-destructive">
-              − {formatBRL(projection.outgoingTotal)}
-            </p>
-          </div>
         </div>
       </section>
 
+      <section className="grid grid-cols-2 gap-3 md:gap-4">
+          <div className="panel p-4 md:p-5">
+            <div className="flex items-center gap-2 text-success"><ArrowUpRight className="size-4" /><p className="text-xs font-semibold">Vai entrar</p></div>
+            <p className="num mt-3 text-base font-semibold text-success sm:text-xl">
+              + {formatBRL(projection.incomingTotal)}
+            </p>
+          </div>
+          <div className="panel p-4 md:p-5">
+            <div className="flex items-center gap-2 text-destructive"><ArrowDownLeft className="size-4" /><p className="text-xs font-semibold">Vai sair</p></div>
+            <p className="num mt-3 text-base font-semibold text-destructive sm:text-xl">
+              − {formatBRL(projection.outgoingTotal)}
+            </p>
+          </div>
+      </section>
+
       {projection.negativeAt && (
-        <section className="rounded-3xl border border-warning/40 bg-warning/10 p-5">
+        <section className="rounded-xl border border-warning/40 bg-warning/10 p-5">
           <p className="flex items-center gap-2 text-sm font-semibold text-warning-foreground">
             <AlertTriangle className="size-4" /> Atenção
           </p>
@@ -136,9 +149,12 @@ function Dashboard() {
         </section>
       )}
 
-      <section className="surface p-2">
-        <div className="flex items-center justify-between px-4 pt-3">
-          <h2 className="text-sm font-semibold">Próximos movimentos</h2>
+      <section className="panel overflow-hidden">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-5 py-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <CalendarDays className="size-5 shrink-0 text-primary" />
+            <h2 className="truncate text-sm font-semibold">Próximos movimentos</h2>
+          </div>
           <Link to="/movimentacoes" className="text-xs text-primary">
             Ver todos
           </Link>
@@ -157,7 +173,7 @@ function Dashboard() {
         ) : (
           <ul className="divide-y divide-border">
             {next.map((movement) => (
-              <li key={movement.key} className="flex items-center gap-4 px-4 py-4">
+              <li key={movement.key} className="grid grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-3 px-5 py-4 transition hover:bg-muted/40">
                 <span className="num w-14 text-xs font-semibold text-muted-foreground">
                   {formatShortDate(movement.date)}
                 </span>

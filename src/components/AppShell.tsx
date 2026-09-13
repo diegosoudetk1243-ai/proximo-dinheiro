@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeftRight, Home, ListOrdered, Plus, Settings } from "lucide-react";
 
 import { MovementDialog, type EditingMovement } from "@/components/MovementDialog";
+import { Brand } from "@/components/Brand";
 import { useFluxo } from "@/lib/fluxo-data";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -60,13 +61,40 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <AddContext.Provider value={value}>
-      <div className="min-h-screen bg-background pb-28 md:pb-10">
-        <header className="sticky top-0 z-30 border-b border-border/70 bg-background/85 backdrop-blur">
-          <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-5">
-            <Link to="/inicio" className="text-base font-semibold tracking-tight">
-              Fluxo App
-            </Link>
-            <nav className="hidden items-center gap-1 md:flex">
+      <div className="min-h-screen bg-background pb-28 md:grid md:grid-cols-[232px_minmax(0,1fr)] md:pb-0">
+        <aside className="fixed inset-y-0 left-0 z-30 hidden w-[232px] flex-col border-r border-sidebar-border bg-sidebar p-5 md:flex">
+          <Link to="/inicio" className="px-2 py-2">
+            <Brand />
+          </Link>
+          <nav className="mt-10 space-y-2">
+            {NAV.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground transition hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
+                activeProps={{ className: "bg-sidebar-accent text-primary" }}
+              >
+                <item.icon className="size-5 shrink-0" />
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="mt-auto border-t border-sidebar-border px-2 pt-5">
+            <p className="text-xs text-muted-foreground">Seu dinheiro em perspectiva.</p>
+          </div>
+        </aside>
+
+        <div className="min-w-0 md:col-start-2">
+          <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur-xl">
+            <div className="mx-auto grid h-18 max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 md:h-20 md:px-8">
+              <Link to="/inicio" className="md:hidden">
+                <Brand compact />
+              </Link>
+              <div className="hidden min-w-0 md:block">
+                <p className="font-display truncate text-base font-semibold">Visão financeira</p>
+                <p className="truncate text-xs text-muted-foreground">Hoje e no futuro, em um só lugar.</p>
+              </div>
+              <nav className="hidden items-center gap-1">
               {NAV.map((item) => (
                 <Link
                   key={item.to}
@@ -77,44 +105,45 @@ export function AppShell({ children }: { children: ReactNode }) {
                   {item.label}
                 </Link>
               ))}
-            </nav>
-            <Link
+              </nav>
+              <Link
               to="/configuracoes"
-              className="flex size-9 items-center justify-center overflow-hidden rounded-full bg-muted text-xs font-semibold uppercase text-muted-foreground md:hidden"
+              className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-card text-xs font-semibold uppercase text-muted-foreground transition hover:border-primary/50"
             >
               {data?.profile?.avatar_url ? (
                 <img src={data.profile.avatar_url} alt="" className="size-full object-cover" />
               ) : (
                 (data?.profile?.name?.[0] ?? "F")
               )}
-            </Link>
-          </div>
-        </header>
+              </Link>
+            </div>
+          </header>
 
-        <main className="mx-auto max-w-3xl px-5 py-6">{children}</main>
+          <main className="mx-auto max-w-6xl px-5 py-6 md:px-8 md:py-8">{children}</main>
+        </div>
 
         <button
           type="button"
           onClick={value.openAdd}
-          className="fixed bottom-24 right-5 z-40 flex items-center gap-2 rounded-full bg-primary px-5 py-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-float)] transition active:scale-95 md:bottom-8"
+          className="fixed bottom-24 right-5 z-40 flex h-13 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-float transition hover:bg-primary/90 active:scale-[0.98] md:bottom-8 md:right-8"
         >
           <Plus className="size-5" />
           <span className="hidden sm:inline">Adicionar movimentação</span>
         </button>
 
-        <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur md:hidden">
+        <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar/95 backdrop-blur-xl md:hidden">
           <div className="mx-auto flex max-w-3xl items-stretch justify-between px-2 pb-[env(safe-area-inset-bottom)]">
             {NAV.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  "flex flex-1 flex-col items-center gap-1 py-3 text-[11px] text-muted-foreground transition",
+                  "flex min-w-0 flex-1 flex-col items-center gap-1 py-3 text-[10px] font-medium text-muted-foreground transition",
                 )}
                 activeProps={{ className: "text-primary font-semibold" }}
               >
-                <item.icon className="size-5" />
-                {item.label}
+                <item.icon className="size-5 shrink-0" />
+                <span className="truncate">{item.label}</span>
               </Link>
             ))}
           </div>
