@@ -110,7 +110,6 @@ function Dashboard() {
             ))}
           </div>
           </div>
-        </div>
         <p className="mt-2 text-sm text-muted-foreground">
           Previsão para os próximos {days} dias
         </p>
