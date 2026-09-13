@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Brand } from "@/components/Brand";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/redefinir-senha")({
@@ -43,8 +44,9 @@ function ResetPassword() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-6">
-      <div className="w-full max-w-sm space-y-5">
-        <h1 className="text-2xl font-bold">Definir nova senha</h1>
+      <div className="panel w-full max-w-sm space-y-6 p-6 sm:p-8">
+        <Brand />
+        <div><p className="eyebrow text-primary">Segurança</p><h1 className="mt-2 text-2xl font-semibold">Definir nova senha</h1></div>
         <div className="space-y-2">
           <Label htmlFor="nova-senha">Nova senha</Label>
           <Input
@@ -53,13 +55,13 @@ function ResetPassword() {
             autoComplete="new-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="h-12 rounded-2xl"
+            className="h-12 rounded-lg"
           />
         </div>
         <Button
           onClick={() => void save()}
           disabled={loading}
-          className="h-12 w-full rounded-2xl"
+          className="h-12 w-full rounded-lg"
         >
           Salvar senha
         </Button>

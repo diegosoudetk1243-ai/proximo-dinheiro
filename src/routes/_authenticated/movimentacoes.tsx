@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell, useMovementDialog } from "@/components/AppShell";
@@ -90,12 +90,13 @@ function Movimentacoes() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-lg font-semibold">Movimentações</h1>
+      <header>
+        <p className="eyebrow">Histórico e agenda</p>
+        <h1 className="mt-2 text-2xl font-semibold md:text-3xl">Movimentações</h1>
         <p className="text-sm text-muted-foreground">Tudo que entra e sai do seu caixa.</p>
-      </div>
+      </header>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="panel flex flex-wrap gap-2 p-3">
         {(
           [
             ["next", "Próximas"],
@@ -108,7 +109,7 @@ function Movimentacoes() {
             type="button"
             onClick={() => setPeriod(value)}
             className={cn(
-              "rounded-full border px-4 py-2 text-xs font-medium transition",
+              "rounded-lg border px-4 py-2 text-xs font-semibold transition",
               period === value
                 ? "border-primary bg-primary/10 text-primary"
                 : "border-border bg-card text-muted-foreground",
@@ -130,7 +131,7 @@ function Movimentacoes() {
             type="button"
             onClick={() => setType(value)}
             className={cn(
-              "rounded-full border px-4 py-2 text-xs font-medium transition",
+              "rounded-lg border px-4 py-2 text-xs font-semibold transition",
               type === value
                 ? "border-primary bg-primary/10 text-primary"
                 : "border-border bg-card text-muted-foreground",
@@ -142,7 +143,7 @@ function Movimentacoes() {
       </div>
 
       {movements.length === 0 ? (
-        <div className="surface p-8 text-center">
+        <div className="panel p-8 text-center">
           <p className="text-sm font-medium">Nada por aqui ainda.</p>
           <p className="mt-1 text-sm text-muted-foreground">
             Adicione o que vai entrar ou sair para começar a visualizar seu caixa.
@@ -160,11 +161,12 @@ function Movimentacoes() {
             return (
               <li key={movement.key}>
                 {showMonth && (
-                  <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <p className="eyebrow mb-2 mt-5">
                     {month}
                   </p>
                 )}
-                <div className="surface flex items-center gap-3 p-4">
+                <div className="panel grid grid-cols-[2rem_3.5rem_minmax(0,1fr)_auto_auto] items-center gap-2 p-4 transition hover:border-primary/30 sm:gap-3">
+                  <span className={cn("grid size-8 place-items-center rounded-lg", movement.type === "income" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive")}>{movement.type === "income" ? <ArrowUpRight className="size-4" /> : <ArrowDownLeft className="size-4" />}</span>
                   <span className="num w-14 text-xs font-semibold text-muted-foreground">
                     {formatShortDate(movement.date)}
                   </span>
@@ -189,7 +191,7 @@ function Movimentacoes() {
                       aria-label="Editar"
                       onClick={() =>
                         openEdit({
-                          transactionId: movement.id!,
+                          transactionId: movement.id,
                           type: movement.type,
                           amount: movement.amount,
                           description: movement.description,
@@ -197,7 +199,7 @@ function Movimentacoes() {
                           categoryId: movement.categoryId,
                         })
                       }
-                      className="rounded-full p-2 text-muted-foreground transition hover:bg-muted"
+                      className="rounded-lg p-2 text-muted-foreground transition hover:bg-muted"
                     >
                       <Pencil className="size-4" />
                     </button>
@@ -206,7 +208,7 @@ function Movimentacoes() {
                     type="button"
                     aria-label="Excluir"
                     onClick={() => handleDelete(movement)}
-                    className="rounded-full p-2 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
+                    className="rounded-lg p-2 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
                   >
                     <Trash2 className="size-4" />
                   </button>

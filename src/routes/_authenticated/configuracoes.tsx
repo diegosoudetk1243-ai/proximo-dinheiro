@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { LogOut } from "lucide-react";
+import { LogOut, UserRound, WalletCards } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell, useSignOut } from "@/components/AppShell";
@@ -57,10 +57,15 @@ function Configuracoes() {
   }
 
   return (
-    <div className="space-y-5">
-      <h1 className="text-lg font-semibold">Configurações</h1>
+    <div className="space-y-6">
+      <header>
+        <p className="eyebrow">Sua conta</p>
+        <h1 className="mt-2 text-2xl font-semibold md:text-3xl">Ajustes</h1>
+      </header>
 
-      <section className="surface space-y-4 p-6">
+      <div className="grid gap-5 lg:grid-cols-2">
+      <section className="panel space-y-5 p-6">
+        <div className="flex items-center gap-2 text-primary"><UserRound className="size-4" /><h2 className="text-sm font-semibold">Perfil</h2></div>
         <div className="flex items-center gap-4">
           <div className="flex size-14 items-center justify-center overflow-hidden rounded-full bg-muted text-lg font-semibold uppercase text-muted-foreground">
             {data.profile?.avatar_url ? (
@@ -81,13 +86,13 @@ function Configuracoes() {
             id="nome"
             value={name}
             onChange={(event) => setName(event.target.value)}
-            className="h-12 rounded-2xl"
+            className="h-12 rounded-lg"
           />
         </div>
       </section>
 
-      <section className="surface space-y-3 p-6">
-        <p className="text-sm font-semibold">Conta principal</p>
+      <section className="panel space-y-3 p-6">
+        <div className="flex items-center gap-2 text-primary"><WalletCards className="size-4" /><h2 className="text-sm font-semibold">Conta principal</h2></div>
         <p className="text-sm text-muted-foreground">{data.account?.name}</p>
         <Label htmlFor="saldo">Saldo inicial informado</Label>
         <MoneyInput id="saldo" value={balance} onChange={setBalance} className="text-2xl" />
@@ -95,22 +100,25 @@ function Configuracoes() {
           É a partir daqui que o Fluxo App calcula seu caixa atual.
         </p>
       </section>
+      </div>
 
-      <Button
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+        <Button
         onClick={handleSave}
         disabled={updateProfile.isPending || updateBalance.isPending}
-        className="h-12 w-full rounded-2xl"
+        className="h-12 w-full rounded-lg sm:w-auto sm:px-8"
       >
         Salvar
       </Button>
 
-      <Button
+        <Button
         variant="outline"
         onClick={() => void signOut()}
-        className="h-12 w-full rounded-2xl text-destructive"
+        className="h-12 w-full rounded-lg text-destructive sm:w-auto"
       >
         <LogOut className="size-4" /> Sair da conta
-      </Button>
+        </Button>
+      </div>
     </div>
   );
 }

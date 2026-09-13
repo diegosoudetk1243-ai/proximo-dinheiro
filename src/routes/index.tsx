@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Brand } from "@/components/Brand";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 
@@ -122,13 +123,26 @@ function AuthPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col justify-center bg-background px-6 py-12">
-      <div className="mx-auto w-full max-w-sm space-y-8">
-        <header className="space-y-3 text-center">
-          <h1 className="text-3xl font-bold tracking-tight">Fluxo App</h1>
-          <p className="text-balance text-muted-foreground">
-            Controle seu fluxo de caixa. Saiba quanto você tem hoje e quanto terá amanhã.
-          </p>
+    <main className="grid min-h-screen bg-background lg:grid-cols-[minmax(0,1.1fr)_minmax(420px,0.9fr)]">
+      <section className="relative hidden overflow-hidden border-r border-border bg-sidebar p-12 lg:flex lg:flex-col lg:justify-between">
+        <Brand />
+        <div className="max-w-xl">
+          <p className="eyebrow text-primary">Controle e previsão financeira</p>
+          <h1 className="mt-5 text-5xl font-semibold leading-tight">Seu dinheiro no controle.<br />Hoje e no futuro.</h1>
+          <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">Registre o que entra e sai. O Fluxo App organiza e mostra com clareza o caminho do seu caixa.</p>
+        </div>
+        <p className="text-xs text-muted-foreground">Confiança. Controle. Clareza.</p>
+      </section>
+
+      <section className="flex min-h-screen items-center px-6 py-10 sm:px-10">
+      <div className="mx-auto w-full max-w-md space-y-8">
+        <header className="space-y-6">
+          <Brand className="lg:hidden" />
+          <div>
+            <p className="eyebrow text-primary">Acesse seu caixa</p>
+            <h2 className="mt-3 text-3xl font-semibold">Seu dinheiro no controle.</h2>
+            <p className="mt-2 text-muted-foreground">Hoje e no futuro.</p>
+          </div>
         </header>
 
         {mode === "choice" && (
@@ -136,7 +150,7 @@ function AuthPage() {
             <Button
               onClick={() => void signInWithGoogle()}
               disabled={loading}
-              className="h-14 w-full rounded-2xl text-base font-semibold"
+              className="h-13 w-full rounded-xl text-base"
             >
               Continuar com Google
             </Button>
@@ -146,7 +160,7 @@ function AuthPage() {
             <Button
               variant="outline"
               onClick={() => setMode("email")}
-              className="h-14 w-full rounded-2xl text-base"
+              className="h-13 w-full rounded-xl text-base"
             >
               <Mail className="size-4" /> Continuar com e-mail
             </Button>
@@ -171,7 +185,7 @@ function AuthPage() {
                 autoComplete="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="h-12 rounded-2xl"
+              className="h-12 rounded-xl"
               />
             </div>
 
@@ -184,7 +198,7 @@ function AuthPage() {
                   autoComplete={isSignUp ? "new-password" : "current-password"}
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  className="h-12 rounded-2xl"
+                  className="h-12 rounded-xl"
                 />
               </div>
             )}
@@ -192,7 +206,7 @@ function AuthPage() {
             <Button
               onClick={() => (mode === "email" ? void submitEmail() : void sendReset())}
               disabled={loading}
-              className="h-13 w-full rounded-2xl py-6 text-base font-semibold"
+              className="h-13 w-full rounded-xl py-6 text-base"
             >
               {mode === "forgot" ? "Enviar link" : isSignUp ? "Criar conta" : "Entrar"}
             </Button>
@@ -218,6 +232,7 @@ function AuthPage() {
           </div>
         )}
       </div>
+      </section>
     </main>
   );
 }

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
+import { ArrowRight, CalendarRange, Plus, Wallet } from "lucide-react";
 
 import { AppShell, useMovementDialog } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -47,27 +47,39 @@ function Fluxo() {
   let lastMonth = "";
 
   return (
-    <div className="space-y-5">
-      <div className="surface flex flex-wrap items-center justify-between gap-3 p-5">
-        <div>
-          <h1 className="text-lg font-semibold">Fluxo</h1>
-          <p className="text-sm text-muted-foreground">Quanto vou ter até…</p>
+    <div className="space-y-6">
+      <header>
+        <p className="eyebrow">Projeção financeira</p>
+        <h1 className="mt-2 text-2xl font-semibold md:text-3xl">O caminho do seu dinheiro</h1>
+      </header>
+
+      <div className="panel grid gap-5 p-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-6">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 text-primary"><CalendarRange className="size-4" /><p className="text-sm font-semibold">Quanto vou ter até…</p></div>
+          <p className="mt-2 text-sm text-muted-foreground">Escolha uma data para visualizar seu saldo projetado.</p>
         </div>
         <input
           type="date"
           value={until}
           onChange={(event) => setUntil(event.target.value)}
-          className="h-11 rounded-xl border border-input bg-card px-3 text-sm outline-none focus:border-primary"
+          className="h-11 rounded-lg border border-input bg-card px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
         />
       </div>
 
-      <div className="surface p-5">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Hoje</p>
-        <p className="num text-2xl font-bold">{formatBRL(projection.currentBalance)}</p>
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
+        <div className="panel min-w-0 p-4 md:p-5">
+          <div className="flex items-center gap-2 text-muted-foreground"><Wallet className="size-4" /><p className="eyebrow">Hoje</p></div>
+          <p className="num font-display mt-2 truncate text-lg font-semibold sm:text-2xl">{formatBRL(projection.currentBalance)}</p>
+        </div>
+        <ArrowRight className="size-5 shrink-0 text-primary" />
+        <div className="panel min-w-0 border-primary/30 p-4 md:p-5">
+          <p className="eyebrow text-primary">Na data escolhida</p>
+          <p className={cn("num font-display mt-2 truncate text-lg font-semibold sm:text-2xl", projection.projectedBalance < 0 && "text-destructive")}>{formatBRL(projection.projectedBalance)}</p>
+        </div>
       </div>
 
       {projection.timeline.length === 0 ? (
-        <div className="surface p-8 text-center">
+        <div className="panel p-8 text-center">
           <p className="text-sm font-medium">Seu fluxo ainda está vazio.</p>
           <p className="mt-1 text-sm text-muted-foreground">
             Adicione o que vai entrar ou sair para começar a visualizar seu caixa.
@@ -77,7 +89,7 @@ function Fluxo() {
           </Button>
         </div>
       ) : (
-        <ol className="space-y-3">
+        <ol className="relative space-y-3 before:absolute before:bottom-4 before:left-[1.55rem] before:top-10 before:w-px before:bg-border">
           {projection.timeline.map(({ movement, balance }) => {
             const month = formatMonthLabel(movement.date);
             const showMonth = month !== lastMonth;
@@ -85,12 +97,12 @@ function Fluxo() {
             return (
               <li key={movement.key}>
                 {showMonth && (
-                  <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <p className="eyebrow mb-2 mt-5">
                     {month}
                   </p>
                 )}
-                <div className="surface flex items-center gap-4 p-4">
-                  <span className="num w-14 text-xs font-semibold text-muted-foreground">
+                <div className="panel relative grid grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-3 p-4 transition hover:border-primary/30">
+                  <span className="num z-10 w-14 text-xs font-semibold text-muted-foreground">
                     {formatShortDate(movement.date)}
                   </span>
                   <div className="min-w-0 flex-1">

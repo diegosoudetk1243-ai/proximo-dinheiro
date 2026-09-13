@@ -21,7 +21,7 @@ export function MoneyInput({ value, onChange, className, autoFocus, id }: Props)
         onChange(digits ? Number(digits) / 100 : 0);
       }}
       className={cn(
-        "num w-full rounded-2xl border border-input bg-card px-4 py-4 text-center text-3xl font-semibold outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10",
+        "num font-display w-full rounded-xl border border-input bg-card px-4 py-4 text-center text-3xl font-semibold outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10",
         className,
       )}
     />
