@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { LogOut, UserRound, WalletCards } from "lucide-react";
+import { BadgeCheck, LogOut, UserRound, WalletCards } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell, useSignOut } from "@/components/AppShell";
@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MoneyInput } from "@/components/MoneyInput";
 import { useFluxo, useUpdateInitialBalance, useUpdateProfile } from "@/lib/fluxo-data";
+import { PLAN_LABEL, STATUS_LABEL, useSubscription } from "@/lib/subscription";
 
 export const Route = createFileRoute("/_authenticated/configuracoes")({
   head: () => ({

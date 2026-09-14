@@ -17,6 +17,7 @@ import { Route as AuthenticatedFluxoRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
 import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as ApiPublicWebhooksApplyfyRouteImport } from './routes/api/public/webhooks/applyfy'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -59,6 +60,12 @@ const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicWebhooksApplyfyRoute =
+  ApiPublicWebhooksApplyfyRouteImport.update({
+    id: '/api/public/webhooks/applyfy',
+    path: '/api/public/webhooks/applyfy',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/inicio': typeof AuthenticatedInicioRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/api/public/webhooks/applyfy': typeof ApiPublicWebhooksApplyfyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,6 +85,7 @@ export interface FileRoutesByTo {
   '/inicio': typeof AuthenticatedInicioRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/api/public/webhooks/applyfy': typeof ApiPublicWebhooksApplyfyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,6 +97,7 @@ export interface FileRoutesById {
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
   '/_authenticated/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/api/public/webhooks/applyfy': typeof ApiPublicWebhooksApplyfyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/inicio'
     | '/movimentacoes'
     | '/onboarding'
+    | '/api/public/webhooks/applyfy'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/inicio'
     | '/movimentacoes'
     | '/onboarding'
+    | '/api/public/webhooks/applyfy'
   id:
     | '__root__'
     | '/'
@@ -118,12 +130,14 @@ export interface FileRouteTypes {
     | '/_authenticated/inicio'
     | '/_authenticated/movimentacoes'
     | '/_authenticated/onboarding'
+    | '/api/public/webhooks/applyfy'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   RedefinirSenhaRoute: typeof RedefinirSenhaRoute
+  ApiPublicWebhooksApplyfyRoute: typeof ApiPublicWebhooksApplyfyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -184,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/webhooks/applyfy': {
+      id: '/api/public/webhooks/applyfy'
+      path: '/api/public/webhooks/applyfy'
+      fullPath: '/api/public/webhooks/applyfy'
+      preLoaderRoute: typeof ApiPublicWebhooksApplyfyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -210,6 +231,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   RedefinirSenhaRoute: RedefinirSenhaRoute,
+  ApiPublicWebhooksApplyfyRoute: ApiPublicWebhooksApplyfyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
