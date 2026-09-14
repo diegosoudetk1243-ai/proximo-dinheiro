@@ -138,12 +138,18 @@
     min-width: 320px;
   }
 
-  h1, h2, h3, .font-display {
+  h1,
+  h2,
+  h3,
+  .font-display {
     font-family: var(--font-display);
     letter-spacing: 0;
   }
 
-  button, a, input, select {
+  button,
+  a,
+  input,
+  select {
     -webkit-tap-highlight-color: transparent;
   }
 }
@@ -175,7 +181,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;

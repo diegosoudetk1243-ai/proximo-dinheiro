@@ -46,7 +46,10 @@ function ResetPassword() {
     <main className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="panel w-full max-w-sm space-y-6 p-6 sm:p-8">
         <Brand />
-        <div><p className="eyebrow text-primary">Segurança</p><h1 className="mt-2 text-2xl font-semibold">Definir nova senha</h1></div>
+        <div>
+          <p className="eyebrow text-primary">Segurança</p>
+          <h1 className="mt-2 text-2xl font-semibold">Definir nova senha</h1>
+        </div>
         <div className="space-y-2">
           <Label htmlFor="nova-senha">Nova senha</Label>
           <Input
@@ -58,11 +61,7 @@ function ResetPassword() {
             className="h-12 rounded-lg"
           />
         </div>
-        <Button
-          onClick={() => void save()}
-          disabled={loading}
-          className="h-12 w-full rounded-lg"
-        >
+        <Button onClick={() => void save()} disabled={loading} className="h-12 w-full rounded-lg">
           Salvar senha
         </Button>
       </div>

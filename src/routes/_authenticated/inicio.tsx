@@ -1,6 +1,13 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, ArrowDownLeft, ArrowUpRight, CalendarDays, Plus, Wallet } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowDownLeft,
+  ArrowUpRight,
+  CalendarDays,
+  Plus,
+  Wallet,
+} from "lucide-react";
 
 import { AppShell, useMovementDialog } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -67,7 +74,9 @@ function Dashboard() {
     <div className="space-y-6">
       <header>
         <p className="eyebrow">Resumo do seu caixa</p>
-        <h1 className="mt-2 text-2xl font-semibold md:text-3xl">Quanto você tem hoje e no futuro</h1>
+        <h1 className="mt-2 text-2xl font-semibold md:text-3xl">
+          Quanto você tem hoje e no futuro
+        </h1>
       </header>
 
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
@@ -94,41 +103,47 @@ function Dashboard() {
                 {formatBRL(projection.projectedBalance)}
               </p>
             </div>
-          <div className="flex rounded-full bg-muted p-1">
-            {HORIZONS.map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => setDays(option)}
-                className={cn(
+            <div className="flex rounded-full bg-muted p-1">
+              {HORIZONS.map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => setDays(option)}
+                  className={cn(
                     "rounded-full px-3 py-1.5 text-xs font-semibold transition",
-                  days === option ? "bg-card text-foreground shadow-sm" : "text-muted-foreground",
-                )}
-              >
-                {option} dias
-              </button>
-            ))}
+                    days === option ? "bg-card text-foreground shadow-sm" : "text-muted-foreground",
+                  )}
+                >
+                  {option} dias
+                </button>
+              ))}
+            </div>
           </div>
-          </div>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Previsão para os próximos {days} dias
-        </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Previsão para os próximos {days} dias
+          </p>
         </div>
       </section>
 
       <section className="grid grid-cols-2 gap-3 md:gap-4">
-          <div className="panel p-4 md:p-5">
-            <div className="flex items-center gap-2 text-success"><ArrowUpRight className="size-4" /><p className="text-xs font-semibold">Vai entrar</p></div>
-            <p className="num mt-3 text-base font-semibold text-success sm:text-xl">
-              + {formatBRL(projection.incomingTotal)}
-            </p>
+        <div className="panel p-4 md:p-5">
+          <div className="flex items-center gap-2 text-success">
+            <ArrowUpRight className="size-4" />
+            <p className="text-xs font-semibold">Vai entrar</p>
           </div>
-          <div className="panel p-4 md:p-5">
-            <div className="flex items-center gap-2 text-destructive"><ArrowDownLeft className="size-4" /><p className="text-xs font-semibold">Vai sair</p></div>
-            <p className="num mt-3 text-base font-semibold text-destructive sm:text-xl">
-              − {formatBRL(projection.outgoingTotal)}
-            </p>
+          <p className="num mt-3 text-base font-semibold text-success sm:text-xl">
+            + {formatBRL(projection.incomingTotal)}
+          </p>
+        </div>
+        <div className="panel p-4 md:p-5">
+          <div className="flex items-center gap-2 text-destructive">
+            <ArrowDownLeft className="size-4" />
+            <p className="text-xs font-semibold">Vai sair</p>
           </div>
+          <p className="num mt-3 text-base font-semibold text-destructive sm:text-xl">
+            − {formatBRL(projection.outgoingTotal)}
+          </p>
+        </div>
       </section>
 
       {projection.negativeAt && (
@@ -172,7 +187,10 @@ function Dashboard() {
         ) : (
           <ul className="divide-y divide-border">
             {next.map((movement) => (
-              <li key={movement.key} className="grid grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-3 px-5 py-4 transition hover:bg-muted/40">
+              <li
+                key={movement.key}
+                className="grid grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-3 px-5 py-4 transition hover:bg-muted/40"
+              >
                 <span className="num w-14 text-xs font-semibold text-muted-foreground">
                   {formatShortDate(movement.date)}
                 </span>

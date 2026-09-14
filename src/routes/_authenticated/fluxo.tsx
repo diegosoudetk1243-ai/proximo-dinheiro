@@ -26,7 +26,6 @@ export const Route = createFileRoute("/_authenticated/fluxo")({
   ),
 });
 
-
 function Fluxo() {
   const { data, isLoading } = useFluxo();
   const { openAdd } = useMovementDialog();
@@ -55,8 +54,13 @@ function Fluxo() {
 
       <div className="panel grid gap-5 p-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-6">
         <div className="min-w-0">
-          <div className="flex items-center gap-2 text-primary"><CalendarRange className="size-4" /><p className="text-sm font-semibold">Quanto vou ter até…</p></div>
-          <p className="mt-2 text-sm text-muted-foreground">Escolha uma data para visualizar seu saldo projetado.</p>
+          <div className="flex items-center gap-2 text-primary">
+            <CalendarRange className="size-4" />
+            <p className="text-sm font-semibold">Quanto vou ter até…</p>
+          </div>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Escolha uma data para visualizar seu saldo projetado.
+          </p>
         </div>
         <input
           type="date"
@@ -68,13 +72,25 @@ function Fluxo() {
 
       <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
         <div className="panel min-w-0 p-4 md:p-5">
-          <div className="flex items-center gap-2 text-muted-foreground"><Wallet className="size-4" /><p className="eyebrow">Hoje</p></div>
-          <p className="num font-display mt-2 truncate text-lg font-semibold sm:text-2xl">{formatBRL(projection.currentBalance)}</p>
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Wallet className="size-4" />
+            <p className="eyebrow">Hoje</p>
+          </div>
+          <p className="num font-display mt-2 truncate text-lg font-semibold sm:text-2xl">
+            {formatBRL(projection.currentBalance)}
+          </p>
         </div>
         <ArrowRight className="size-5 shrink-0 text-primary" />
         <div className="panel min-w-0 border-primary/30 p-4 md:p-5">
           <p className="eyebrow text-primary">Na data escolhida</p>
-          <p className={cn("num font-display mt-2 truncate text-lg font-semibold sm:text-2xl", projection.projectedBalance < 0 && "text-destructive")}>{formatBRL(projection.projectedBalance)}</p>
+          <p
+            className={cn(
+              "num font-display mt-2 truncate text-lg font-semibold sm:text-2xl",
+              projection.projectedBalance < 0 && "text-destructive",
+            )}
+          >
+            {formatBRL(projection.projectedBalance)}
+          </p>
         </div>
       </div>
 
@@ -96,20 +112,14 @@ function Fluxo() {
             lastMonth = month;
             return (
               <li key={movement.key}>
-                {showMonth && (
-                  <p className="eyebrow mb-2 mt-5">
-                    {month}
-                  </p>
-                )}
+                {showMonth && <p className="eyebrow mb-2 mt-5">{month}</p>}
                 <div className="panel relative grid grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-3 p-4 transition hover:border-primary/30">
                   <span className="num z-10 w-14 text-xs font-semibold text-muted-foreground">
                     {formatShortDate(movement.date)}
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">{movement.description}</p>
-                    <p className="num text-xs text-muted-foreground">
-                      Saldo: {formatBRL(balance)}
-                    </p>
+                    <p className="num text-xs text-muted-foreground">Saldo: {formatBRL(balance)}</p>
                   </div>
                   <span
                     className={cn(
