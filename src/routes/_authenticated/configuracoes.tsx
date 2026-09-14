@@ -18,6 +18,8 @@ export const Route = createFileRoute("/_authenticated/configuracoes")({
       { name: "description", content: "Seu perfil, sua conta principal e sua saída." },
       { property: "og:title", content: "Configurações — Fluxo App" },
       { property: "og:description", content: "Ajuste seu nome e o saldo da sua conta." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (
@@ -64,59 +66,65 @@ function Configuracoes() {
       </header>
 
       <div className="grid gap-5 lg:grid-cols-2">
-      <section className="panel space-y-5 p-6">
-        <div className="flex items-center gap-2 text-primary"><UserRound className="size-4" /><h2 className="text-sm font-semibold">Perfil</h2></div>
-        <div className="flex items-center gap-4">
-          <div className="flex size-14 items-center justify-center overflow-hidden rounded-full bg-muted text-lg font-semibold uppercase text-muted-foreground">
-            {data.profile?.avatar_url ? (
-              <img src={data.profile.avatar_url} alt="" className="size-full object-cover" />
-            ) : (
-              (data.profile?.name?.[0] ?? "F")
-            )}
+        <section className="panel space-y-5 p-6">
+          <div className="flex items-center gap-2 text-primary">
+            <UserRound className="size-4" />
+            <h2 className="text-sm font-semibold">Perfil</h2>
           </div>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-medium">{data.profile?.name ?? "Você"}</p>
-            <p className="truncate text-sm text-muted-foreground">{data.profile?.email}</p>
+          <div className="flex items-center gap-4">
+            <div className="flex size-14 items-center justify-center overflow-hidden rounded-full bg-muted text-lg font-semibold uppercase text-muted-foreground">
+              {data.profile?.avatar_url ? (
+                <img src={data.profile.avatar_url} alt="" className="size-full object-cover" />
+              ) : (
+                (data.profile?.name?.[0] ?? "F")
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium">{data.profile?.name ?? "Você"}</p>
+              <p className="truncate text-sm text-muted-foreground">{data.profile?.email}</p>
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="nome">Nome</Label>
-          <Input
-            id="nome"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            className="h-12 rounded-lg"
-          />
-        </div>
-      </section>
+          <div className="space-y-2">
+            <Label htmlFor="nome">Nome</Label>
+            <Input
+              id="nome"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              className="h-12 rounded-lg"
+            />
+          </div>
+        </section>
 
-      <section className="panel space-y-3 p-6">
-        <div className="flex items-center gap-2 text-primary"><WalletCards className="size-4" /><h2 className="text-sm font-semibold">Conta principal</h2></div>
-        <p className="text-sm text-muted-foreground">{data.account?.name}</p>
-        <Label htmlFor="saldo">Saldo inicial informado</Label>
-        <MoneyInput id="saldo" value={balance} onChange={setBalance} className="text-2xl" />
-        <p className="text-xs text-muted-foreground">
-          É a partir daqui que o Fluxo App calcula seu caixa atual.
-        </p>
-      </section>
+        <section className="panel space-y-3 p-6">
+          <div className="flex items-center gap-2 text-primary">
+            <WalletCards className="size-4" />
+            <h2 className="text-sm font-semibold">Conta principal</h2>
+          </div>
+          <p className="text-sm text-muted-foreground">{data.account?.name}</p>
+          <Label htmlFor="saldo">Saldo inicial informado</Label>
+          <MoneyInput id="saldo" value={balance} onChange={setBalance} className="text-2xl" />
+          <p className="text-xs text-muted-foreground">
+            É a partir daqui que o Fluxo App calcula seu caixa atual.
+          </p>
+        </section>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
         <Button
-        onClick={handleSave}
-        disabled={updateProfile.isPending || updateBalance.isPending}
-        className="h-12 w-full rounded-lg sm:w-auto sm:px-8"
-      >
-        Salvar
-      </Button>
+          onClick={handleSave}
+          disabled={updateProfile.isPending || updateBalance.isPending}
+          className="h-12 w-full rounded-lg sm:w-auto sm:px-8"
+        >
+          Salvar
+        </Button>
 
         <Button
-        variant="outline"
-        onClick={() => void signOut()}
-        className="h-12 w-full rounded-lg text-destructive sm:w-auto"
-      >
-        <LogOut className="size-4" /> Sair da conta
+          variant="outline"
+          onClick={() => void signOut()}
+          className="h-12 w-full rounded-lg text-destructive sm:w-auto"
+        >
+          <LogOut className="size-4" /> Sair da conta
         </Button>
       </div>
     </div>

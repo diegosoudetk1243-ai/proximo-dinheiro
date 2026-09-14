@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MoneyInput } from "@/components/MoneyInput";
+import { Brand } from "@/components/Brand";
 import { supabase } from "@/integrations/supabase/client";
 import { useFluxo, useUpdateInitialBalance, useUpdateProfile } from "@/lib/fluxo-data";
 import { formatBRL, formatFullDate, todayISO } from "@/lib/format";
@@ -19,6 +20,8 @@ export const Route = createFileRoute("/_authenticated/onboarding")({
       { name: "description", content: "Configure seu caixa em poucos passos." },
       { property: "og:title", content: "Configurar seu caixa — Fluxo App" },
       { property: "og:description", content: "Saldo atual, o que vai entrar e o que vai sair." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Onboarding,
@@ -78,104 +81,126 @@ function Onboarding() {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col justify-between px-6 py-10">
-      <div className="space-y-6">
-        {step === 0 && (
-          <div className="space-y-4">
-            <h1 className="text-3xl font-bold leading-tight">Bem-vindo ao Fluxo App 👋</h1>
-            <p className="text-muted-foreground">
-              Controle seu fluxo de caixa. Saiba quanto você tem hoje e quanto terá amanhã.
-            </p>
-            <p className="text-sm text-muted-foreground">Configure seu caixa em poucos passos.</p>
+    <main className="min-h-screen bg-background px-5 py-6 sm:py-10">
+      <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-lg flex-col rounded-xl border border-border bg-card p-5 shadow-soft sm:min-h-[calc(100vh-5rem)] sm:p-8">
+        <div className="space-y-8">
+          <div className="flex items-center justify-between gap-4">
+            <Brand />
+            <span className="shrink-0 text-xs font-semibold text-muted-foreground">
+              {Math.min(step + 1, 5)} de 5
+            </span>
           </div>
-        )}
-
-        {step === 1 && (
-          <div className="space-y-4">
-            <h1 className="text-2xl font-bold">Quanto você tem hoje?</h1>
-            <MoneyInput value={balance} onChange={setBalance} autoFocus />
-            <p className="text-sm text-muted-foreground">
-              Informe quanto dinheiro você tem disponível agora.
-            </p>
+          <div
+            className="grid grid-cols-5 gap-2"
+            aria-label={`Etapa ${Math.min(step + 1, 5)} de 5`}
+          >
+            {[0, 1, 2, 3, 4].map((item) => (
+              <span
+                key={item}
+                className={`h-1 rounded-full ${item <= step ? "bg-primary" : "bg-muted"}`}
+              />
+            ))}
           </div>
-        )}
+          {step === 0 && (
+            <div className="space-y-4">
+              <p className="eyebrow text-primary">Vamos começar</p>
+              <h1 className="text-3xl font-semibold leading-tight">Bem-vindo ao Fluxo App</h1>
+              <p className="text-muted-foreground">
+                Controle seu fluxo de caixa. Saiba quanto você tem hoje e quanto terá amanhã.
+              </p>
+              <p className="text-sm text-muted-foreground">Configure seu caixa em poucos passos.</p>
+            </div>
+          )}
 
-        {step === 2 && (
-          <DraftStep
-            title="Vai entrar algum dinheiro?"
-            placeholder="Salário"
-            items={incomes}
-            onChange={setIncomes}
-          />
-        )}
+          {step === 1 && (
+            <div className="space-y-4">
+              <p className="eyebrow text-primary">Seu ponto de partida</p>
+              <h1 className="text-2xl font-semibold">Quanto você tem hoje?</h1>
+              <MoneyInput value={balance} onChange={setBalance} autoFocus />
+              <p className="text-sm text-muted-foreground">
+                Informe quanto dinheiro você tem disponível agora.
+              </p>
+            </div>
+          )}
 
-        {step === 3 && (
-          <DraftStep
-            title="Vai sair algum dinheiro?"
-            placeholder="Aluguel"
-            items={expenses}
-            onChange={setExpenses}
-          />
-        )}
+          {step === 2 && (
+            <DraftStep
+              title="Vai entrar algum dinheiro?"
+              placeholder="Salário"
+              items={incomes}
+              onChange={setIncomes}
+            />
+          )}
 
-        {step === 4 && (
-          <div className="space-y-5">
-            <h1 className="text-2xl font-bold">Seu caixa está configurado.</h1>
-            <div className="surface space-y-4 p-6">
-              <Row label="Caixa atual" value={formatBRL(balance)} />
-              <Row label="Vai entrar" value={`+ ${formatBRL(totalIn)}`} tone="success" />
-              <Row label="Vai sair" value={`− ${formatBRL(totalOut)}`} tone="destructive" />
-              <div className="border-t border-border pt-4">
-                <p className="text-sm text-muted-foreground">Caixa previsto</p>
-                <p className="num text-3xl font-bold">
-                  {formatBRL(balance + totalIn - totalOut)}
-                </p>
+          {step === 3 && (
+            <DraftStep
+              title="Vai sair algum dinheiro?"
+              placeholder="Aluguel"
+              items={expenses}
+              onChange={setExpenses}
+            />
+          )}
+
+          {step === 4 && (
+            <div className="space-y-5">
+              <p className="eyebrow text-primary">Tudo pronto</p>
+              <h1 className="text-2xl font-semibold">Seu caixa está configurado.</h1>
+              <div className="panel space-y-4 p-6">
+                <Row label="Caixa atual" value={formatBRL(balance)} />
+                <Row label="Vai entrar" value={`+ ${formatBRL(totalIn)}`} tone="success" />
+                <Row label="Vai sair" value={`− ${formatBRL(totalOut)}`} tone="destructive" />
+                <div className="border-t border-border pt-4">
+                  <p className="text-sm text-muted-foreground">Caixa previsto</p>
+                  <p className="num font-display text-3xl font-semibold">
+                    {formatBRL(balance + totalIn - totalOut)}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
 
-      <div className="mt-8 space-y-3">
-        {step === 0 && (
-          <Button className="h-13 w-full rounded-2xl py-6" onClick={() => setStep(1)}>
-            Começar
-          </Button>
-        )}
-        {step === 1 && (
-          <Button className="h-13 w-full rounded-2xl py-6" onClick={() => setStep(2)}>
-            Continuar
-          </Button>
-        )}
-        {(step === 2 || step === 3) && (
-          <>
-            <Button
-              className="h-13 w-full rounded-2xl py-6"
-              onClick={() => (step === 2 ? setStep(3) : void finish())}
-              disabled={saving}
-            >
+        <div className="mt-8 space-y-3">
+          {step === 0 && (
+            <Button className="h-13 w-full rounded-xl py-6" onClick={() => setStep(1)}>
+              Começar
+            </Button>
+          )}
+          {step === 1 && (
+            <Button className="h-13 w-full rounded-xl py-6" onClick={() => setStep(2)}>
               Continuar
             </Button>
+          )}
+          {(step === 2 || step === 3) && (
+            <>
+              <Button
+                className="h-13 w-full rounded-xl py-6"
+                onClick={() => (step === 2 ? setStep(3) : void finish())}
+                disabled={saving}
+              >
+                Continuar
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full"
+                disabled={saving}
+                onClick={() => (step === 2 ? setStep(3) : void finish())}
+              >
+                Pular por enquanto
+              </Button>
+            </>
+          )}
+          {step === 4 && (
             <Button
-              variant="ghost"
-              className="w-full"
-              disabled={saving}
-              onClick={() => (step === 2 ? setStep(3) : void finish())}
+              className="h-13 w-full rounded-xl py-6"
+              onClick={() => navigate({ to: "/inicio", replace: true })}
             >
-              Pular por enquanto
+              Ver meu caixa
             </Button>
-          </>
-        )}
-        {step === 4 && (
-          <Button
-            className="h-13 w-full rounded-2xl py-6"
-            onClick={() => navigate({ to: "/inicio", replace: true })}
-          >
-            Ver meu caixa
-          </Button>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -230,9 +255,10 @@ function DraftStep({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">{title}</h1>
+      <p className="eyebrow text-primary">Organize sua previsão</p>
+      <h1 className="text-2xl font-semibold">{title}</h1>
 
-      <div className="surface space-y-3 p-4">
+      <div className="panel space-y-3 p-4">
         <div className="space-y-2">
           <Label htmlFor="desc">Descrição</Label>
           <Input
@@ -240,7 +266,7 @@ function DraftStep({
             placeholder={placeholder}
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            className="h-12 rounded-2xl"
+            className="h-12 rounded-lg"
           />
         </div>
         <div className="space-y-2">
@@ -254,10 +280,10 @@ function DraftStep({
             type="date"
             value={date}
             onChange={(event) => setDate(event.target.value)}
-            className="h-12 rounded-2xl"
+            className="h-12 rounded-lg"
           />
         </div>
-        <Button variant="secondary" className="w-full rounded-2xl" onClick={add}>
+        <Button variant="secondary" className="w-full rounded-lg" onClick={add}>
           <Plus className="size-4" /> Adicionar
         </Button>
       </div>
@@ -267,7 +293,7 @@ function DraftStep({
           {items.map((item, index) => (
             <li
               key={`${item.description}-${index}`}
-              className="surface flex items-center gap-3 p-3 text-sm"
+              className="panel grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 p-3 text-sm"
             >
               <span className="flex-1 truncate">{item.description}</span>
               <span className="num font-medium">{formatBRL(item.amount)}</span>

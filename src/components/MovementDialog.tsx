@@ -135,7 +135,7 @@ export function MovementDialog({ open, onOpenChange, accountId, categories, edit
             type="button"
             onClick={() => setType("income")}
             className={cn(
-               "flex items-center justify-center gap-2 rounded-xl border px-4 py-4 text-sm font-semibold transition",
+              "flex items-center justify-center gap-2 rounded-xl border px-4 py-4 text-sm font-semibold transition",
               type === "income"
                 ? "border-success bg-success/10 text-success"
                 : "border-border bg-card text-muted-foreground hover:bg-muted",
@@ -147,7 +147,7 @@ export function MovementDialog({ open, onOpenChange, accountId, categories, edit
             type="button"
             onClick={() => setType("expense")}
             className={cn(
-               "flex items-center justify-center gap-2 rounded-xl border px-4 py-4 text-sm font-semibold transition",
+              "flex items-center justify-center gap-2 rounded-xl border px-4 py-4 text-sm font-semibold transition",
               type === "expense"
                 ? "border-destructive bg-destructive/10 text-destructive"
                 : "border-border bg-card text-muted-foreground hover:bg-muted",
@@ -209,7 +209,7 @@ export function MovementDialog({ open, onOpenChange, accountId, categories, edit
                 type="button"
                 onClick={() => setRepeats(false)}
                 className={cn(
-                   "rounded-xl border px-4 py-3 text-sm font-medium transition",
+                  "rounded-xl border px-4 py-3 text-sm font-medium transition",
                   !repeats ? "border-primary bg-primary/10 text-primary" : "border-border bg-card",
                 )}
               >
@@ -219,7 +219,7 @@ export function MovementDialog({ open, onOpenChange, accountId, categories, edit
                 type="button"
                 onClick={() => setRepeats(true)}
                 className={cn(
-                   "rounded-xl border px-4 py-3 text-sm font-medium transition",
+                  "rounded-xl border px-4 py-3 text-sm font-medium transition",
                   repeats ? "border-primary bg-primary/10 text-primary" : "border-border bg-card",
                 )}
               >
@@ -228,7 +228,7 @@ export function MovementDialog({ open, onOpenChange, accountId, categories, edit
             </div>
 
             {repeats && (
-               <div className="space-y-3 rounded-xl border border-border bg-muted/60 p-3">
+              <div className="space-y-3 rounded-xl border border-border bg-muted/60 p-3">
                 <select
                   value={frequency}
                   onChange={(event) => setFrequency(event.target.value as Frequency)}

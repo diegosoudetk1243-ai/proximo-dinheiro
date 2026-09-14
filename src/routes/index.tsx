@@ -24,6 +24,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Registre o que entra e o que sai. O Fluxo App mostra seu caixa futuro.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AuthPage,
@@ -128,110 +130,118 @@ function AuthPage() {
         <Brand />
         <div className="max-w-xl">
           <p className="eyebrow text-primary">Controle e previsão financeira</p>
-          <h1 className="mt-5 text-5xl font-semibold leading-tight">Seu dinheiro no controle.<br />Hoje e no futuro.</h1>
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">Registre o que entra e sai. O Fluxo App organiza e mostra com clareza o caminho do seu caixa.</p>
+          <h1 className="mt-5 text-5xl font-semibold leading-tight">
+            Seu dinheiro no controle.
+            <br />
+            Hoje e no futuro.
+          </h1>
+          <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">
+            Registre o que entra e sai. O Fluxo App organiza e mostra com clareza o caminho do seu
+            caixa.
+          </p>
         </div>
         <p className="text-xs text-muted-foreground">Confiança. Controle. Clareza.</p>
       </section>
 
       <section className="flex min-h-screen items-center px-6 py-10 sm:px-10">
-      <div className="mx-auto w-full max-w-md space-y-8">
-        <header className="space-y-6">
-          <Brand className="lg:hidden" />
-          <div>
-            <p className="eyebrow text-primary">Acesse seu caixa</p>
-            <h2 className="mt-3 text-3xl font-semibold">Seu dinheiro no controle.</h2>
-            <p className="mt-2 text-muted-foreground">Hoje e no futuro.</p>
-          </div>
-        </header>
-
-        {mode === "choice" && (
-          <div className="space-y-4">
-            <Button
-              onClick={() => void signInWithGoogle()}
-              disabled={loading}
-              className="h-13 w-full rounded-xl text-base"
-            >
-              Continuar com Google
-            </Button>
-            <div className="flex items-center gap-3 text-xs text-muted-foreground">
-              <span className="h-px flex-1 bg-border" /> ou <span className="h-px flex-1 bg-border" />
+        <div className="mx-auto w-full max-w-md space-y-8">
+          <header className="space-y-6">
+            <Brand className="lg:hidden" />
+            <div>
+              <p className="eyebrow text-primary">Acesse seu caixa</p>
+              <h2 className="mt-3 text-3xl font-semibold">Seu dinheiro no controle.</h2>
+              <p className="mt-2 text-muted-foreground">Hoje e no futuro.</p>
             </div>
-            <Button
-              variant="outline"
-              onClick={() => setMode("email")}
-              className="h-13 w-full rounded-xl text-base"
-            >
-              <Mail className="size-4" /> Continuar com e-mail
-            </Button>
-          </div>
-        )}
+          </header>
 
-        {mode !== "choice" && (
-          <div className="space-y-4">
-            <button
-              type="button"
-              onClick={() => setMode("choice")}
-              className="flex items-center gap-1 text-sm text-muted-foreground"
-            >
-              <ArrowLeft className="size-4" /> Voltar
-            </button>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">E-mail</Label>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              className="h-12 rounded-xl"
-              />
+          {mode === "choice" && (
+            <div className="space-y-4">
+              <Button
+                onClick={() => void signInWithGoogle()}
+                disabled={loading}
+                className="h-13 w-full rounded-xl text-base"
+              >
+                Continuar com Google
+              </Button>
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <span className="h-px flex-1 bg-border" /> ou{" "}
+                <span className="h-px flex-1 bg-border" />
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => setMode("email")}
+                className="h-13 w-full rounded-xl text-base"
+              >
+                <Mail className="size-4" /> Continuar com e-mail
+              </Button>
             </div>
+          )}
 
-            {mode === "email" && (
+          {mode !== "choice" && (
+            <div className="space-y-4">
+              <button
+                type="button"
+                onClick={() => setMode("choice")}
+                className="flex items-center gap-1 text-sm text-muted-foreground"
+              >
+                <ArrowLeft className="size-4" /> Voltar
+              </button>
+
               <div className="space-y-2">
-                <Label htmlFor="senha">Senha</Label>
+                <Label htmlFor="email">E-mail</Label>
                 <Input
-                  id="senha"
-                  type="password"
-                  autoComplete={isSignUp ? "new-password" : "current-password"}
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                   className="h-12 rounded-xl"
                 />
               </div>
-            )}
 
-            <Button
-              onClick={() => (mode === "email" ? void submitEmail() : void sendReset())}
-              disabled={loading}
-              className="h-13 w-full rounded-xl py-6 text-base"
-            >
-              {mode === "forgot" ? "Enviar link" : isSignUp ? "Criar conta" : "Entrar"}
-            </Button>
+              {mode === "email" && (
+                <div className="space-y-2">
+                  <Label htmlFor="senha">Senha</Label>
+                  <Input
+                    id="senha"
+                    type="password"
+                    autoComplete={isSignUp ? "new-password" : "current-password"}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    className="h-12 rounded-xl"
+                  />
+                </div>
+              )}
 
-            {mode === "email" && (
-              <div className="flex items-center justify-between text-sm">
-                <button
-                  type="button"
-                  className="text-primary"
-                  onClick={() => setIsSignUp((value) => !value)}
-                >
-                  {isSignUp ? "Já tenho conta" : "Criar conta"}
-                </button>
-                <button
-                  type="button"
-                  className="text-muted-foreground"
-                  onClick={() => setMode("forgot")}
-                >
-                  Esqueci a senha
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+              <Button
+                onClick={() => (mode === "email" ? void submitEmail() : void sendReset())}
+                disabled={loading}
+                className="h-13 w-full rounded-xl py-6 text-base"
+              >
+                {mode === "forgot" ? "Enviar link" : isSignUp ? "Criar conta" : "Entrar"}
+              </Button>
+
+              {mode === "email" && (
+                <div className="flex items-center justify-between text-sm">
+                  <button
+                    type="button"
+                    className="text-primary"
+                    onClick={() => setIsSignUp((value) => !value)}
+                  >
+                    {isSignUp ? "Já tenho conta" : "Criar conta"}
+                  </button>
+                  <button
+                    type="button"
+                    className="text-muted-foreground"
+                    onClick={() => setMode("forgot")}
+                  >
+                    Esqueci a senha
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </section>
     </main>
   );

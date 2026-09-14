@@ -92,29 +92,31 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Link>
               <div className="hidden min-w-0 md:block">
                 <p className="font-display truncate text-base font-semibold">Visão financeira</p>
-                <p className="truncate text-xs text-muted-foreground">Hoje e no futuro, em um só lugar.</p>
+                <p className="truncate text-xs text-muted-foreground">
+                  Hoje e no futuro, em um só lugar.
+                </p>
               </div>
               <nav className="hidden items-center gap-1">
-              {NAV.map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className="rounded-full px-3 py-2 text-sm text-muted-foreground transition hover:bg-muted"
-                  activeProps={{ className: "bg-muted text-foreground font-medium" }}
-                >
-                  {item.label}
-                </Link>
-              ))}
+                {NAV.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className="rounded-full px-3 py-2 text-sm text-muted-foreground transition hover:bg-muted"
+                    activeProps={{ className: "bg-muted text-foreground font-medium" }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </nav>
               <Link
-              to="/configuracoes"
-              className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-card text-xs font-semibold uppercase text-muted-foreground transition hover:border-primary/50"
-            >
-              {data?.profile?.avatar_url ? (
-                <img src={data.profile.avatar_url} alt="" className="size-full object-cover" />
-              ) : (
-                (data?.profile?.name?.[0] ?? "F")
-              )}
+                to="/configuracoes"
+                className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-card text-xs font-semibold uppercase text-muted-foreground transition hover:border-primary/50"
+              >
+                {data?.profile?.avatar_url ? (
+                  <img src={data.profile.avatar_url} alt="" className="size-full object-cover" />
+                ) : (
+                  (data?.profile?.name?.[0] ?? "F")
+                )}
               </Link>
             </div>
           </header>

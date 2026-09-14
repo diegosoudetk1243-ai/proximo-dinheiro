@@ -23,6 +23,8 @@ export const Route = createFileRoute("/_authenticated/movimentacoes")({
       { name: "description", content: "Tudo que entrou e vai entrar, entrou e vai sair." },
       { property: "og:title", content: "Movimentações — Fluxo App" },
       { property: "og:description", content: "Edite ou exclua o que entra e o que sai." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (
@@ -157,16 +159,26 @@ function Movimentacoes() {
           {movements.map((movement) => {
             const month = formatMonthLabel(movement.date);
             const showMonth = month !== lastMonth;
+            const transactionId = movement.id;
             lastMonth = month;
             return (
               <li key={movement.key}>
-                {showMonth && (
-                  <p className="eyebrow mb-2 mt-5">
-                    {month}
-                  </p>
-                )}
+                {showMonth && <p className="eyebrow mb-2 mt-5">{month}</p>}
                 <div className="panel grid grid-cols-[2rem_3.5rem_minmax(0,1fr)_auto_auto] items-center gap-2 p-4 transition hover:border-primary/30 sm:gap-3">
-                  <span className={cn("grid size-8 place-items-center rounded-lg", movement.type === "income" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive")}>{movement.type === "income" ? <ArrowUpRight className="size-4" /> : <ArrowDownLeft className="size-4" />}</span>
+                  <span
+                    className={cn(
+                      "grid size-8 place-items-center rounded-lg",
+                      movement.type === "income"
+                        ? "bg-success/10 text-success"
+                        : "bg-destructive/10 text-destructive",
+                    )}
+                  >
+                    {movement.type === "income" ? (
+                      <ArrowUpRight className="size-4" />
+                    ) : (
+                      <ArrowDownLeft className="size-4" />
+                    )}
+                  </span>
                   <span className="num w-14 text-xs font-semibold text-muted-foreground">
                     {formatShortDate(movement.date)}
                   </span>
@@ -185,13 +197,13 @@ function Movimentacoes() {
                     {movement.type === "income" ? "+ " : "− "}
                     {formatBRL(movement.amount)}
                   </span>
-                  {movement.id && (
+                  {transactionId && (
                     <button
                       type="button"
                       aria-label="Editar"
                       onClick={() =>
                         openEdit({
-                          transactionId: movement.id,
+                          transactionId,
                           type: movement.type,
                           amount: movement.amount,
                           description: movement.description,
