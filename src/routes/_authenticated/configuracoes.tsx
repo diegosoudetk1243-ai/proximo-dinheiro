@@ -109,6 +109,31 @@ function Configuracoes() {
             É a partir daqui que o Fluxo App calcula seu caixa atual.
           </p>
         </section>
+
+        <section className="panel space-y-3 p-6">
+          <div className="flex items-center gap-2 text-primary">
+            <BadgeCheck className="size-4" />
+            <h2 className="text-sm font-semibold">Assinatura</h2>
+          </div>
+          {subscription.isLoading ? (
+            <Skeleton className="h-10 rounded-lg" />
+          ) : subscription.data ? (
+            <div className="space-y-1">
+              <p className="text-sm font-medium">{PLAN_LABEL[subscription.data.plan]}</p>
+              <p className="text-sm text-muted-foreground">
+                {STATUS_LABEL[subscription.data.status]}
+              </p>
+              {subscription.data.current_period_end ? (
+                <p className="text-xs text-muted-foreground">
+                  Próxima renovação em{" "}
+                  {new Date(subscription.data.current_period_end).toLocaleDateString("pt-BR")}
+                </p>
+              ) : null}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Sem assinatura ativa no momento.</p>
+          )}
+        </section>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
