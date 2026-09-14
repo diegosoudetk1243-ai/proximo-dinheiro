@@ -157,6 +157,7 @@ function Movimentacoes() {
           {movements.map((movement) => {
             const month = formatMonthLabel(movement.date);
             const showMonth = month !== lastMonth;
+            const transactionId = movement.id;
             lastMonth = month;
             return (
               <li key={movement.key}>
@@ -185,13 +186,13 @@ function Movimentacoes() {
                     {movement.type === "income" ? "+ " : "− "}
                     {formatBRL(movement.amount)}
                   </span>
-                  {movement.id && (
+                  {transactionId && (
                     <button
                       type="button"
                       aria-label="Editar"
                       onClick={() =>
                         openEdit({
-                          transactionId: movement.id,
+                          transactionId,
                           type: movement.type,
                           amount: movement.amount,
                           description: movement.description,
