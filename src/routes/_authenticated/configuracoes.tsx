@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { LogOut, UserRound, WalletCards } from "lucide-react";
+import { BadgeCheck, LogOut, UserRound, WalletCards } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell, useSignOut } from "@/components/AppShell";
@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MoneyInput } from "@/components/MoneyInput";
 import { useFluxo, useUpdateInitialBalance, useUpdateProfile } from "@/lib/fluxo-data";
+import { PLAN_LABEL, STATUS_LABEL, useSubscription } from "@/lib/subscription";
 
 export const Route = createFileRoute("/_authenticated/configuracoes")({
   head: () => ({
@@ -107,6 +108,31 @@ function Configuracoes() {
           <p className="text-xs text-muted-foreground">
             É a partir daqui que o Fluxo App calcula seu caixa atual.
           </p>
+        </section>
+
+        <section className="panel space-y-3 p-6">
+          <div className="flex items-center gap-2 text-primary">
+            <BadgeCheck className="size-4" />
+            <h2 className="text-sm font-semibold">Assinatura</h2>
+          </div>
+          {subscription.isLoading ? (
+            <Skeleton className="h-10 rounded-lg" />
+          ) : subscription.data ? (
+            <div className="space-y-1">
+              <p className="text-sm font-medium">{PLAN_LABEL[subscription.data.plan]}</p>
+              <p className="text-sm text-muted-foreground">
+                {STATUS_LABEL[subscription.data.status]}
+              </p>
+              {subscription.data.current_period_end ? (
+                <p className="text-xs text-muted-foreground">
+                  Próxima renovação em{" "}
+                  {new Date(subscription.data.current_period_end).toLocaleDateString("pt-BR")}
+                </p>
+              ) : null}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Sem assinatura ativa no momento.</p>
+          )}
         </section>
       </div>
 
