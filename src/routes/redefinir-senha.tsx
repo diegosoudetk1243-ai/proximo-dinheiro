@@ -16,6 +16,8 @@ export const Route = createFileRoute("/redefinir-senha")({
       { name: "description", content: "Defina uma nova senha para entrar no Fluxo App." },
       { property: "og:title", content: "Nova senha — Fluxo App" },
       { property: "og:description", content: "Defina uma nova senha de acesso." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ResetPassword,

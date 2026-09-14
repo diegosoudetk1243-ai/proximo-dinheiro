@@ -20,6 +20,8 @@ export const Route = createFileRoute("/_authenticated/onboarding")({
       { name: "description", content: "Configure seu caixa em poucos passos." },
       { property: "og:title", content: "Configurar seu caixa — Fluxo App" },
       { property: "og:description", content: "Saldo atual, o que vai entrar e o que vai sair." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Onboarding,

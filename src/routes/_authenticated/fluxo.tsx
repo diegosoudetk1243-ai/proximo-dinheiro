@@ -17,6 +17,8 @@ export const Route = createFileRoute("/_authenticated/fluxo")({
       { name: "description", content: "O caminho do seu dinheiro ao longo do tempo." },
       { property: "og:title", content: "Fluxo — Fluxo App" },
       { property: "og:description", content: "Veja o saldo depois de cada movimentação." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (

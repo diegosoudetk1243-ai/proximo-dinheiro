@@ -23,6 +23,8 @@ export const Route = createFileRoute("/_authenticated/movimentacoes")({
       { name: "description", content: "Tudo que entrou e vai entrar, entrou e vai sair." },
       { property: "og:title", content: "Movimentações — Fluxo App" },
       { property: "og:description", content: "Edite ou exclua o que entra e o que sai." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (

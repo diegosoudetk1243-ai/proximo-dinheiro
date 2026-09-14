@@ -18,6 +18,8 @@ export const Route = createFileRoute("/_authenticated/configuracoes")({
       { name: "description", content: "Seu perfil, sua conta principal e sua saída." },
       { property: "og:title", content: "Configurações — Fluxo App" },
       { property: "og:description", content: "Ajuste seu nome e o saldo da sua conta." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (

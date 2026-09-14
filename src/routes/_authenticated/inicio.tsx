@@ -24,6 +24,8 @@ export const Route = createFileRoute("/_authenticated/inicio")({
       { name: "description", content: "Veja quanto você tem hoje e quanto terá amanhã." },
       { property: "og:title", content: "Início — Fluxo App" },
       { property: "og:description", content: "Seu caixa atual e o caixa previsto, sem contas." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (
