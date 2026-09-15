@@ -35,7 +35,7 @@ function Configuracoes() {
   const updateProfile = useUpdateProfile();
   const updateBalance = useUpdateInitialBalance();
   const signOut = useSignOut();
-
+  const subscription = useSubscription();
   const [name, setName] = useState("");
   const [balance, setBalance] = useState(0);
 
