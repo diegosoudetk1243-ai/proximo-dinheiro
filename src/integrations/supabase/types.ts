@@ -42,6 +42,65 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "accounts_user_profile_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      billing_webhook_events: {
+        Row: {
+          attempt_count: number
+          error_code: string | null
+          event_type: string
+          external_event_id: string | null
+          external_payment_id: string | null
+          external_subscription_id: string | null
+          id: string
+          payload: Json
+          payload_hash: string
+          processed_at: string | null
+          processing_status: string
+          provider: string
+          provider_created_at: string | null
+          received_at: string
+        }
+        Insert: {
+          attempt_count?: number
+          error_code?: string | null
+          event_type: string
+          external_event_id?: string | null
+          external_payment_id?: string | null
+          external_subscription_id?: string | null
+          id?: string
+          payload: Json
+          payload_hash: string
+          processed_at?: string | null
+          processing_status?: string
+          provider?: string
+          provider_created_at?: string | null
+          received_at?: string
+        }
+        Update: {
+          attempt_count?: number
+          error_code?: string | null
+          event_type?: string
+          external_event_id?: string | null
+          external_payment_id?: string | null
+          external_subscription_id?: string | null
+          id?: string
+          payload?: Json
+          payload_hash?: string
+          processed_at?: string | null
+          processing_status?: string
+          provider?: string
+          provider_created_at?: string | null
+          received_at?: string
+        }
         Relationships: []
       }
       categories: {
@@ -66,7 +125,15 @@ export type Database = {
           type?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "categories_user_profile_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -149,6 +216,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "recurring_account_owner_fkey"
+            columns: ["account_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id", "user_id"]
+          },
+          {
             foreignKeyName: "recurring_transactions_account_id_fkey"
             columns: ["account_id"]
             isOneToOne: false
@@ -162,46 +236,82 @@ export type Database = {
             referencedRelation: "categories"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "recurring_user_profile_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       subscriptions: {
         Row: {
+          access_until: string | null
+          cancel_at_period_end: boolean
           created_at: string
           current_period_end: string | null
+          current_period_start: string | null
+          external_customer_id: string | null
+          external_subscription_id: string | null
           gateway_customer_id: string | null
           gateway_subscription_id: string | null
           id: string
+          last_event_at: string | null
           plan: string
+          provider: string
           started_at: string
           status: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          access_until?: string | null
+          cancel_at_period_end?: boolean
           created_at?: string
           current_period_end?: string | null
+          current_period_start?: string | null
+          external_customer_id?: string | null
+          external_subscription_id?: string | null
           gateway_customer_id?: string | null
           gateway_subscription_id?: string | null
           id?: string
+          last_event_at?: string | null
           plan?: string
+          provider?: string
           started_at?: string
           status?: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          access_until?: string | null
+          cancel_at_period_end?: boolean
           created_at?: string
           current_period_end?: string | null
+          current_period_start?: string | null
+          external_customer_id?: string | null
+          external_subscription_id?: string | null
           gateway_customer_id?: string | null
           gateway_subscription_id?: string | null
           id?: string
+          last_event_at?: string | null
           plan?: string
+          provider?: string
           started_at?: string
           status?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_user_profile_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       transactions: {
         Row: {
@@ -255,6 +365,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "transactions_account_owner_fkey"
+            columns: ["account_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id", "user_id"]
+          },
+          {
             foreignKeyName: "transactions_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
@@ -268,6 +385,20 @@ export type Database = {
             referencedRelation: "recurring_transactions"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "transactions_recurrence_owner_fkey"
+            columns: ["recurrence_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "recurring_transactions"
+            referencedColumns: ["id", "user_id"]
+          },
+          {
+            foreignKeyName: "transactions_user_profile_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
@@ -275,7 +406,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_paid_access: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
