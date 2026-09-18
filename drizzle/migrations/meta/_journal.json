@@ -29,6 +29,13 @@
       "when": 1789761769174,
       "tag": "0003_secure_subscription_access_and_webhook_audit",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789761805703,
+      "tag": "0004_register_billing_webhook_event",
+      "breakpoints": true
     }
   ]
 }

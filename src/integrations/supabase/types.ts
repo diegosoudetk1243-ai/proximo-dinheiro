@@ -407,6 +407,22 @@ export type Database = {
     }
     Functions: {
       has_paid_access: { Args: never; Returns: boolean }
+      register_billing_webhook_event: {
+        Args: {
+          _event_type: string
+          _external_event_id: string
+          _external_payment_id: string
+          _external_subscription_id: string
+          _payload: Json
+          _payload_hash: string
+          _provider_created_at: string
+        }
+        Returns: {
+          attempts: number
+          event_id: string
+          is_new: boolean
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
