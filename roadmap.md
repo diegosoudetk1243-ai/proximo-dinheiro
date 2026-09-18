@@ -8,4 +8,7 @@
 - [x] Evoluir estrutura segura de assinaturas e auditoria de webhooks
 - [x] Aplicar isolamento relacional e bloqueio pago no banco
 - [x] Criar endpoint GGCheckout limitado ao contrato oficial disponível
-- [ ] Ativar vínculo e ciclo recorrente após documentação oficial da GGCheckout
+- [ ] Substituir GGCheckout por cobrança recorrente Paddle
+- [ ] Criar planos Mensal R$ 24,90 e Anual R$ 149,90
+- [ ] Integrar checkout, gestão e ciclo recorrente Paddle
+- [ ] Validar segurança e fluxos de assinatura
