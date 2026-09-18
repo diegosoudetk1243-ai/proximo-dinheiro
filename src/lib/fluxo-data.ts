@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { hasPaidAccess, type Subscription } from "./subscription";
 import type { MovementType, Recurrence, Transaction } from "./projection";
 
 export type Profile = {
@@ -24,6 +25,7 @@ export type FluxoData = {
   transactions: Transaction[];
   recurrences: Recurrence[];
   categories: Category[];
+  hasPaidAccess: boolean;
 };
 
 export const FLUXO_KEY = ["fluxo"] as const;
@@ -33,13 +35,28 @@ async function fetchFluxo(): Promise<FluxoData> {
   if (userError || !userData.user) throw new Error("Sessão expirada. Entre novamente.");
   const userId = userData.user.id;
 
-  const [profileRes, accountsRes, txRes, recRes, catRes] = await Promise.all([
+  const [profileRes, subscriptionRes] = await Promise.all([
     supabase.from("profiles").select("*").eq("id", userId).maybeSingle(),
-    supabase.from("accounts").select("*").eq("user_id", userId).order("created_at"),
-    supabase.from("transactions").select("*").eq("user_id", userId).order("date"),
-    supabase.from("recurring_transactions").select("*").eq("user_id", userId),
-    supabase.from("categories").select("id,name,type").order("name"),
+    supabase.from("subscriptions").select("*").eq("user_id", userId).maybeSingle(),
   ]);
+  if (profileRes.error || subscriptionRes.error) {
+    throw new Error((profileRes.error ?? subscriptionRes.error)?.message);
+  }
+
+  const paidAccess = hasPaidAccess(subscriptionRes.data as Subscription | null);
+  const [accountsRes, txRes, recRes, catRes] = paidAccess
+    ? await Promise.all([
+        supabase.from("accounts").select("*").eq("user_id", userId).order("created_at"),
+        supabase.from("transactions").select("*").eq("user_id", userId).order("date"),
+        supabase.from("recurring_transactions").select("*").eq("user_id", userId),
+        supabase.from("categories").select("id,name,type").order("name"),
+      ])
+    : [
+        { data: [], error: null },
+        { data: [], error: null },
+        { data: [], error: null },
+        { data: [], error: null },
+      ];
 
   const firstError =
     profileRes.error || accountsRes.error || txRes.error || recRes.error || catRes.error;
@@ -81,6 +98,7 @@ async function fetchFluxo(): Promise<FluxoData> {
     transactions: (txRes.data ?? []) as Transaction[],
     recurrences: (recRes.data ?? []) as Recurrence[],
     categories: (catRes.data ?? []) as Category[],
+    hasPaidAccess: paidAccess,
   };
 }
 
