@@ -130,7 +130,9 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckout")({
 
         const payload = parsed.data;
         const eventType = payload.event.toLowerCase();
-        const payloadHash = createHash("sha256").update(stableStringify(unknownPayload)).digest("hex");
+        const payloadHash = createHash("sha256")
+          .update(stableStringify(unknownPayload))
+          .digest("hex");
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const { data, error } = await supabaseAdmin.rpc("register_billing_webhook_event", {
           _external_event_id: "",
