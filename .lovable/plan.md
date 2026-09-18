@@ -1,44 +1,65 @@
-# Diagnóstico do `invalid_payload` — GGCheckout
+# Cobrança recorrente simples com Paddle
 
-Nenhuma alteração foi feita.
+## Objetivo
 
-## O que o endpoint exige
+Substituir a integração incompleta da GGCheckout pela cobrança nativa do Paddle, mantendo os planos:
 
-O corpo precisa ser JSON válido, não vazio e menor que 1 MB. Após isso, o schema exige:
+- **Mensal:** R$ 24,90
+- **Anual:** R$ 149,90
 
-- `event`: texto não vazio, até 100 caracteres;
-- `createdAt`: texto em formato ISO/RFC 3339 com fuso, como `2024-01-15T10:30:00Z`;
-- `payment`: objeto obrigatório;
-- `payment.id`: texto não vazio, até 300 caracteres;
-- `product`: objeto obrigatório;
-- `product.id`: texto não vazio, até 300 caracteres.
+O Paddle foi verificado como compatível com o Fluxo App. O projeto também já está em um plano que permite ativar pagamentos.
 
-Os blocos `customer`, `products` e `webhook` são opcionais, mas, quando enviados, seus campos conhecidos precisam respeitar os tipos definidos. Por exemplo, `customer.email` precisa ser um e-mail válido; `payment.amount` e `products[].price` precisam ser números, não textos nem `null`.
+## O que será feito
 
-## Comparação com a documentação oficial
+1. **Ativar Paddle em ambiente de teste**
+   - Criar a integração oficial de pagamentos recorrentes.
+   - Começar sem cobranças reais.
 
-O exemplo oficial completo da GGCheckout foi executado contra o schema atual e passou integralmente. Portanto, não existe incompatibilidade entre o schema e o exemplo oficial publicado.
+2. **Criar os dois planos**
+   - Plano Mensal recorrente por R$ 24,90.
+   - Plano Anual recorrente por R$ 149,90.
+   - Não criar itens ou preços adicionais.
 
-## O que os logs comprovam
+3. **Conectar a assinatura ao usuário autenticado**
+   - O usuário entra no Fluxo App antes de comprar.
+   - O checkout recebe uma referência segura da conta.
+   - O navegador não poderá definir status, período ou acesso.
 
-- Houve três requisições `POST` publicadas para `/api/public/webhooks/ggcheckout`, todas respondidas com HTTP 400.
-- Nenhuma chegou à tabela de auditoria, então a rejeição ocorreu antes do registro do evento.
-- Os logs disponíveis não contêm o corpo recebido nem os detalhes produzidos pelo validador.
-- A rota converte todas as falhas do schema na mesma resposta genérica `{ "error": "invalid_payload" }` e descarta o caminho exato do erro.
+4. **Atualizar o controle de acesso existente**
+   - Reaproveitar a tabela `subscriptions` e as proteções já implantadas.
+   - Adaptar o provedor e os identificadores externos para Paddle sem apagar dados.
+   - Atualizar assinatura somente pelo processamento seguro do servidor.
+   - Preservar todos os dados financeiros após cancelamento ou vencimento.
 
-## Causa identificável
+5. **Cobrir o ciclo recorrente completo**
+   - Ativação após pagamento confirmado.
+   - Renovação e atualização do período.
+   - Falha de pagamento.
+   - Cancelamento no fim do período aplicável.
+   - Expiração e reembolso conforme os eventos oficiais do Paddle.
+   - Deduplicação e auditoria dos eventos recebidos.
 
-Com os dados atualmente registrados, **não é tecnicamente possível identificar exatamente qual campo do teste causou a rejeição**. É possível afirmar apenas que ocorreu uma destas situações:
+6. **Adicionar compra e gestão na interface atual**
+   - Botões para assinar o plano mensal ou anual.
+   - Estado atual da assinatura em Configurações.
+   - Acesso ao gerenciamento de cobrança e cancelamento.
+   - Manter o visual atual, sem reformulação.
 
-1. corpo vazio ou acima de 1 MB;
-2. JSON inválido;
-3. ausência ou formato inválido em `event`, `createdAt`, `payment`, `payment.id`, `product` ou `product.id`;
-4. um campo opcional conhecido chegou como `null` ou com tipo diferente do esperado.
+7. **Remover a dependência operacional da GGCheckout**
+   - Desativar e remover a rota específica da GGCheckout após Paddle funcionar.
+   - Remover referências e segredo antigos que deixarem de ser necessários.
+   - Preservar registros históricos de auditoria, sem reutilizá-los para acesso.
 
-Como o exemplo oficial passa, o teste real enviado pela GGCheckout necessariamente difere desse exemplo em pelo menos um desses pontos. Os logs atuais não preservam qual diferença foi.
+8. **Validar antes de pagamentos reais**
+   - Compra mensal e anual no ambiente de teste.
+   - Renovação, cancelamento, falha, reembolso e evento repetido.
+   - Usuário A nunca acessa ou altera assinatura/dados do usuário B.
+   - Usuário não consegue fabricar uma assinatura ativa pelo navegador.
 
-## Correção mínima necessária
+## Resultado
 
-A correção mínima para descobrir a causa real é fazer o endpoint registrar, de forma temporária e segura, somente os caminhos e códigos dos erros de validação — sem registrar segredo, dados pessoais ou o payload completo. Exemplo do diagnóstico esperado: `payment.id: required` ou `createdAt: invalid_format`.
+O Fluxo App terá checkout recorrente, renovação, cancelamento e controle de acesso em uma integração única e suportada, sem depender do payload incompleto da GGCheckout.
 
-Somente após uma nova tentativa será possível corrigir o schema no campo comprovadamente incompatível. Tornar campos obrigatórios opcionais agora seria uma suposição e poderia enfraquecer a validação.
+## Observação operacional
+
+Depois dos testes, o Paddle solicitará verificação para liberar pagamentos reais. Como comerciante responsável pela cobrança, ele também cuida de impostos, reembolsos e contestações relacionados ao pagamento.
