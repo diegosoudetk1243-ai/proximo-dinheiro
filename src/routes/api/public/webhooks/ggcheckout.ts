@@ -133,35 +133,22 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckout")({
         const payloadHash = createHash("sha256")
           .update(stableStringify(unknownPayload))
           .digest("hex");
+        const errorCode = documentedEvents.has(eventType)
+          ? "recurring_contract_not_documented"
+          : "unsupported_event";
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const { data, error } = await supabaseAdmin.rpc("register_billing_webhook_event", {
-          _external_event_id: "",
+        const { data, error } = await supabaseAdmin.rpc("register_ignored_billing_webhook_event", {
           _event_type: eventType,
           _external_payment_id: payload.payment.id,
-          _external_subscription_id: "",
           _provider_created_at: payload.createdAt,
           _payload: JSON.parse(rawBody) as Json,
           _payload_hash: payloadHash,
+          _error_code: errorCode,
         });
 
         if (error || !data?.[0]) return json({ error: "event_registration_failed" }, 500);
         const registration = data[0];
         if (!registration.is_new) return json({ received: true, duplicate: true }, 200);
-
-        const errorCode = documentedEvents.has(eventType)
-          ? "recurring_contract_not_documented"
-          : "unsupported_event";
-
-        const { error: updateError } = await supabaseAdmin
-          .from("billing_webhook_events")
-          .update({
-            processing_status: "ignored",
-            processed_at: new Date().toISOString(),
-            error_code: errorCode,
-          })
-          .eq("id", registration.event_id);
-
-        if (updateError) return json({ error: "event_audit_update_failed" }, 500);
 
         // A documentação pública não confirma referência externa do usuário,
         // IDs/períodos de assinatura nem eventos recorrentes. O evento é auditado,
