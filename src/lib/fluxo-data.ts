@@ -46,10 +46,10 @@ async function fetchFluxo(): Promise<FluxoData> {
   const paidAccess = hasPaidAccess(subscriptionRes.data as Subscription | null);
   const [accountsRes, txRes, recRes, catRes] = paidAccess
     ? await Promise.all([
-    supabase.from("accounts").select("*").eq("user_id", userId).order("created_at"),
-    supabase.from("transactions").select("*").eq("user_id", userId).order("date"),
-    supabase.from("recurring_transactions").select("*").eq("user_id", userId),
-    supabase.from("categories").select("id,name,type").order("name"),
+        supabase.from("accounts").select("*").eq("user_id", userId).order("created_at"),
+        supabase.from("transactions").select("*").eq("user_id", userId).order("date"),
+        supabase.from("recurring_transactions").select("*").eq("user_id", userId),
+        supabase.from("categories").select("id,name,type").order("name"),
       ])
     : [
         { data: [], error: null },

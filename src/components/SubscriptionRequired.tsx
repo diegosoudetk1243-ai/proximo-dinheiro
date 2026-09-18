@@ -37,7 +37,9 @@ export function SubscriptionRequired({ subscription }: { subscription: Subscript
           </span>
         </div>
       ) : (
-        <p className="mt-4 text-sm text-muted-foreground">Nenhuma assinatura foi vinculada à sua conta.</p>
+        <p className="mt-4 text-sm text-muted-foreground">
+          Nenhuma assinatura foi vinculada à sua conta.
+        </p>
       )}
 
       <Button asChild className="mt-7 h-11 rounded-lg px-6">

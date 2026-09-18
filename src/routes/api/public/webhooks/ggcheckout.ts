@@ -83,7 +83,9 @@ function matchesSecret(received: string | null, expected: string) {
   if (!received) return false;
   const receivedBytes = new TextEncoder().encode(received);
   const expectedBytes = new TextEncoder().encode(expected);
-  return receivedBytes.length === expectedBytes.length && timingSafeEqual(receivedBytes, expectedBytes);
+  return (
+    receivedBytes.length === expectedBytes.length && timingSafeEqual(receivedBytes, expectedBytes)
+  );
 }
 
 export const Route = createFileRoute("/api/public/webhooks/ggcheckout")({

@@ -3,12 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export type SubscriptionPlan = "monthly" | "yearly";
 export type SubscriptionStatus =
-  | "pending"
-  | "active"
-  | "past_due"
-  | "canceled"
-  | "expired"
-  | "refunded";
+  "pending" | "active" | "past_due" | "canceled" | "expired" | "refunded";
 
 export type Subscription = {
   id: string;

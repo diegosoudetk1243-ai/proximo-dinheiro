@@ -136,14 +136,16 @@ export function AppShell({ children }: { children: ReactNode }) {
           </main>
         </div>
 
-        {paidAccess ? <button
-          type="button"
-          onClick={value.openAdd}
-          className="fixed bottom-24 right-5 z-40 flex h-13 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-float transition hover:bg-primary/90 active:scale-[0.98] md:bottom-8 md:right-8"
-        >
-          <Plus className="size-5" />
-          <span className="hidden sm:inline">Adicionar movimentação</span>
-        </button> : null}
+        {paidAccess ? (
+          <button
+            type="button"
+            onClick={value.openAdd}
+            className="fixed bottom-24 right-5 z-40 flex h-13 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-float transition hover:bg-primary/90 active:scale-[0.98] md:bottom-8 md:right-8"
+          >
+            <Plus className="size-5" />
+            <span className="hidden sm:inline">Adicionar movimentação</span>
+          </button>
+        ) : null}
 
         <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar/95 backdrop-blur-xl md:hidden">
           <div className="mx-auto flex max-w-3xl items-stretch justify-between px-2 pb-[env(safe-area-inset-bottom)]">
