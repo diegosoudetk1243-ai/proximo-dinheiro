@@ -97,7 +97,7 @@ function Configuracoes() {
           </div>
         </section>
 
-        <section className="panel space-y-3 p-6">
+        {data.account ? <section className="panel space-y-3 p-6">
           <div className="flex items-center gap-2 text-primary">
             <WalletCards className="size-4" />
             <h2 className="text-sm font-semibold">Conta principal</h2>
@@ -108,7 +108,7 @@ function Configuracoes() {
           <p className="text-xs text-muted-foreground">
             É a partir daqui que o Fluxo App calcula seu caixa atual.
           </p>
-        </section>
+        </section> : null}
 
         <section className="panel space-y-3 p-6">
           <div className="flex items-center gap-2 text-primary">
@@ -125,7 +125,7 @@ function Configuracoes() {
               </p>
               {subscription.data.current_period_end ? (
                 <p className="text-xs text-muted-foreground">
-                  Próxima renovação em{" "}
+                  Período informado até{" "}
                   {new Date(subscription.data.current_period_end).toLocaleDateString("pt-BR")}
                 </p>
               ) : null}

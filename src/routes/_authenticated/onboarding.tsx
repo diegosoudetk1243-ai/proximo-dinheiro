@@ -12,6 +12,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useFluxo, useUpdateInitialBalance, useUpdateProfile } from "@/lib/fluxo-data";
 import { formatBRL, formatFullDate, todayISO } from "@/lib/format";
 import type { MovementType } from "@/lib/projection";
+import { SubscriptionRequired } from "@/components/SubscriptionRequired";
+import { hasPaidAccess, useSubscription } from "@/lib/subscription";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   head: () => ({
@@ -34,6 +36,7 @@ function Onboarding() {
   const { data } = useFluxo();
   const updateBalance = useUpdateInitialBalance();
   const updateProfile = useUpdateProfile();
+  const subscription = useSubscription();
 
   const [step, setStep] = useState(0);
   const [balance, setBalance] = useState(0);
@@ -43,6 +46,14 @@ function Onboarding() {
 
   const totalIn = incomes.reduce((acc, item) => acc + item.amount, 0);
   const totalOut = expenses.reduce((acc, item) => acc + item.amount, 0);
+
+  if (!subscription.isLoading && !hasPaidAccess(subscription.data)) {
+    return (
+      <main className="min-h-screen bg-background px-5 py-6 sm:py-10">
+        <SubscriptionRequired subscription={subscription.data ?? null} />
+      </main>
+    );
+  }
 
   async function finish() {
     if (!data?.account) return;

@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeftRight, Home, ListOrdered, Plus, Settings } from "lucide-react";
 
@@ -8,6 +8,8 @@ import { Brand } from "@/components/Brand";
 import { useFluxo } from "@/lib/fluxo-data";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { SubscriptionRequired } from "@/components/SubscriptionRequired";
+import { hasPaidAccess, useSubscription } from "@/lib/subscription";
 
 type AddContextValue = {
   openAdd: () => void;
@@ -42,6 +44,10 @@ export function useSignOut() {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { data } = useFluxo();
+  const subscription = useSubscription();
+  const location = useLocation();
+  const settingsOpen = location.pathname === "/configuracoes";
+  const paidAccess = hasPaidAccess(subscription.data);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<EditingMovement | null>(null);
 
@@ -121,17 +127,23 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
           </header>
 
-          <main className="mx-auto max-w-6xl px-5 py-6 md:px-8 md:py-8">{children}</main>
+          <main className="mx-auto max-w-6xl px-5 py-6 md:px-8 md:py-8">
+            {settingsOpen || subscription.isLoading || paidAccess ? (
+              children
+            ) : (
+              <SubscriptionRequired subscription={subscription.data ?? null} />
+            )}
+          </main>
         </div>
 
-        <button
+        {paidAccess ? <button
           type="button"
           onClick={value.openAdd}
           className="fixed bottom-24 right-5 z-40 flex h-13 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-float transition hover:bg-primary/90 active:scale-[0.98] md:bottom-8 md:right-8"
         >
           <Plus className="size-5" />
           <span className="hidden sm:inline">Adicionar movimentação</span>
-        </button>
+        </button> : null}
 
         <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar/95 backdrop-blur-xl md:hidden">
           <div className="mx-auto flex max-w-3xl items-stretch justify-between px-2 pb-[env(safe-area-inset-bottom)]">
@@ -151,7 +163,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </nav>
 
-        {data?.account && (
+        {paidAccess && data?.account && (
           <MovementDialog
             open={open}
             onOpenChange={setOpen}
