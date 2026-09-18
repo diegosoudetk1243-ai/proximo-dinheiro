@@ -252,13 +252,18 @@ export type Database = {
           created_at: string
           current_period_end: string | null
           current_period_start: string | null
+          environment: string
           external_customer_id: string | null
           external_subscription_id: string | null
           gateway_customer_id: string | null
           gateway_subscription_id: string | null
           id: string
           last_event_at: string | null
+          paddle_customer_id: string | null
+          paddle_subscription_id: string | null
           plan: string
+          price_id: string | null
+          product_id: string | null
           provider: string
           started_at: string
           status: string
@@ -271,13 +276,18 @@ export type Database = {
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
+          environment?: string
           external_customer_id?: string | null
           external_subscription_id?: string | null
           gateway_customer_id?: string | null
           gateway_subscription_id?: string | null
           id?: string
           last_event_at?: string | null
+          paddle_customer_id?: string | null
+          paddle_subscription_id?: string | null
           plan?: string
+          price_id?: string | null
+          product_id?: string | null
           provider?: string
           started_at?: string
           status?: string
@@ -290,13 +300,18 @@ export type Database = {
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
+          environment?: string
           external_customer_id?: string | null
           external_subscription_id?: string | null
           gateway_customer_id?: string | null
           gateway_subscription_id?: string | null
           id?: string
           last_event_at?: string | null
+          paddle_customer_id?: string | null
+          paddle_subscription_id?: string | null
           plan?: string
+          price_id?: string | null
+          product_id?: string | null
           provider?: string
           started_at?: string
           status?: string

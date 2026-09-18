@@ -57,6 +57,13 @@
       "when": 1789762027516,
       "tag": "0007_make_subscription_access_check_invoker_safe",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1789764475156,
+      "tag": "0008_extend_subscriptions_for_paddle",
+      "breakpoints": true
     }
   ]
 }
