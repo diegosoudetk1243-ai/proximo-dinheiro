@@ -2,6 +2,8 @@ import { createHash, timingSafeEqual } from "node:crypto";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
+import type { Json } from "@/integrations/supabase/types";
+
 const documentedEvents = new Set([
   "pix.paid",
   "pix.generated",
@@ -118,12 +120,12 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckout")({
         const payloadHash = createHash("sha256").update(rawBody).digest("hex");
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const { data, error } = await supabaseAdmin.rpc("register_billing_webhook_event", {
-          _external_event_id: null,
+          _external_event_id: "",
           _event_type: eventType,
           _external_payment_id: payload.payment.id,
-          _external_subscription_id: null,
+          _external_subscription_id: "",
           _provider_created_at: payload.createdAt,
-          _payload: payload,
+          _payload: JSON.parse(rawBody) as Json,
           _payload_hash: payloadHash,
         });
 

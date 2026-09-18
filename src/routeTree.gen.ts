@@ -17,7 +17,7 @@ import { Route as AuthenticatedFluxoRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
 import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
-import { Route as ApiPublicWebhooksGgcheckautiRouteImport } from './routes/api/public/webhooks/ggcheckauti'
+import { Route as ApiPublicWebhooksGgcheckoutRouteImport } from './routes/api/public/webhooks/ggcheckout'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -60,10 +60,10 @@ const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const ApiPublicWebhooksGgcheckautiRoute =
-  ApiPublicWebhooksGgcheckautiRouteImport.update({
-    id: '/api/public/webhooks/ggcheckauti',
-    path: '/api/public/webhooks/ggcheckauti',
+const ApiPublicWebhooksGgcheckoutRoute =
+  ApiPublicWebhooksGgcheckoutRouteImport.update({
+    id: '/api/public/webhooks/ggcheckout',
+    path: '/api/public/webhooks/ggcheckout',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -75,7 +75,7 @@ export interface FileRoutesByFullPath {
   '/inicio': typeof AuthenticatedInicioRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
-  '/api/public/webhooks/ggcheckauti': typeof ApiPublicWebhooksGgcheckautiRoute
+  '/api/public/webhooks/ggcheckout': typeof ApiPublicWebhooksGgcheckoutRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,7 +85,7 @@ export interface FileRoutesByTo {
   '/inicio': typeof AuthenticatedInicioRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
-  '/api/public/webhooks/ggcheckauti': typeof ApiPublicWebhooksGgcheckautiRoute
+  '/api/public/webhooks/ggcheckout': typeof ApiPublicWebhooksGgcheckoutRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,7 +97,7 @@ export interface FileRoutesById {
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
   '/_authenticated/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
-  '/api/public/webhooks/ggcheckauti': typeof ApiPublicWebhooksGgcheckautiRoute
+  '/api/public/webhooks/ggcheckout': typeof ApiPublicWebhooksGgcheckoutRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -109,7 +109,7 @@ export interface FileRouteTypes {
     | '/inicio'
     | '/movimentacoes'
     | '/onboarding'
-    | '/api/public/webhooks/ggcheckauti'
+    | '/api/public/webhooks/ggcheckout'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -119,7 +119,7 @@ export interface FileRouteTypes {
     | '/inicio'
     | '/movimentacoes'
     | '/onboarding'
-    | '/api/public/webhooks/ggcheckauti'
+    | '/api/public/webhooks/ggcheckout'
   id:
     | '__root__'
     | '/'
@@ -130,14 +130,14 @@ export interface FileRouteTypes {
     | '/_authenticated/inicio'
     | '/_authenticated/movimentacoes'
     | '/_authenticated/onboarding'
-    | '/api/public/webhooks/ggcheckauti'
+    | '/api/public/webhooks/ggcheckout'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   RedefinirSenhaRoute: typeof RedefinirSenhaRoute
-  ApiPublicWebhooksGgcheckautiRoute: typeof ApiPublicWebhooksGgcheckautiRoute
+  ApiPublicWebhooksGgcheckoutRoute: typeof ApiPublicWebhooksGgcheckoutRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -198,11 +198,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/api/public/webhooks/ggcheckauti': {
-      id: '/api/public/webhooks/ggcheckauti'
-      path: '/api/public/webhooks/ggcheckauti'
-      fullPath: '/api/public/webhooks/ggcheckauti'
-      preLoaderRoute: typeof ApiPublicWebhooksGgcheckautiRouteImport
+    '/api/public/webhooks/ggcheckout': {
+      id: '/api/public/webhooks/ggcheckout'
+      path: '/api/public/webhooks/ggcheckout'
+      fullPath: '/api/public/webhooks/ggcheckout'
+      preLoaderRoute: typeof ApiPublicWebhooksGgcheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -231,7 +231,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   RedefinirSenhaRoute: RedefinirSenhaRoute,
-  ApiPublicWebhooksGgcheckautiRoute: ApiPublicWebhooksGgcheckautiRoute,
+  ApiPublicWebhooksGgcheckoutRoute: ApiPublicWebhooksGgcheckoutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
