@@ -88,6 +88,17 @@ function matchesSecret(received: string | null, expected: string) {
   );
 }
 
+function stableStringify(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableStringify).join(",")}]`;
+  if (value && typeof value === "object") {
+    const entries = Object.entries(value as Record<string, unknown>)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, entry]) => `${JSON.stringify(key)}:${stableStringify(entry)}`);
+    return `{${entries.join(",")}}`;
+  }
+  return JSON.stringify(value);
+}
+
 export const Route = createFileRoute("/api/public/webhooks/ggcheckout")({
   server: {
     handlers: {
@@ -119,7 +130,7 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckout")({
 
         const payload = parsed.data;
         const eventType = payload.event.toLowerCase();
-        const payloadHash = createHash("sha256").update(rawBody).digest("hex");
+        const payloadHash = createHash("sha256").update(stableStringify(unknownPayload)).digest("hex");
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const { data, error } = await supabaseAdmin.rpc("register_billing_webhook_event", {
           _external_event_id: "",
