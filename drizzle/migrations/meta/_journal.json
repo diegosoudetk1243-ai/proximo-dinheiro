@@ -36,6 +36,13 @@
       "when": 1789761805703,
       "tag": "0004_register_billing_webhook_event",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1789761884688,
+      "tag": "0005_normalize_optional_webhook_identifiers",
+      "breakpoints": true
     }
   ]
 }
