@@ -422,6 +422,27 @@ export type Database = {
     }
     Functions: {
       has_paid_access: { Args: never; Returns: boolean }
+      process_paddle_subscription_event: {
+        Args: {
+          _cancel_at_period_end: boolean
+          _current_period_end: string
+          _current_period_start: string
+          _environment: string
+          _event_type: string
+          _external_customer_id: string
+          _external_event_id: string
+          _external_subscription_id: string
+          _payload: Json
+          _payload_hash: string
+          _plan: string
+          _price_id: string
+          _product_id: string
+          _provider_created_at: string
+          _status: string
+          _user_id: string
+        }
+        Returns: string
+      }
       register_billing_webhook_event: {
         Args: {
           _event_type: string

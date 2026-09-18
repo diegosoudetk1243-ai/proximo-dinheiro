@@ -64,6 +64,13 @@
       "when": 1789764475156,
       "tag": "0008_extend_subscriptions_for_paddle",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1789764528731,
+      "tag": "0009_process_paddle_subscription_events",
+      "breakpoints": true
     }
   ]
 }
