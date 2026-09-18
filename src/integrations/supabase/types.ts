@@ -423,6 +423,21 @@ export type Database = {
           is_new: boolean
         }[]
       }
+      register_ignored_billing_webhook_event: {
+        Args: {
+          _error_code: string
+          _event_type: string
+          _external_payment_id: string
+          _payload: Json
+          _payload_hash: string
+          _provider_created_at: string
+        }
+        Returns: {
+          attempts: number
+          event_id: string
+          is_new: boolean
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

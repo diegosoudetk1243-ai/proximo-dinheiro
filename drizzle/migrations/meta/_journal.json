@@ -43,6 +43,13 @@
       "when": 1789761884688,
       "tag": "0005_normalize_optional_webhook_identifiers",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789761994139,
+      "tag": "0006_atomically_audit_unprocessed_ggcheckout_events",
+      "breakpoints": true
     }
   ]
 }
