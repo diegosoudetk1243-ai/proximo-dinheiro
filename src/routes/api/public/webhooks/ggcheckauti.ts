@@ -53,7 +53,7 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const secret = process.env.GG_CHECKOUT_WEBHOOK_SECRET;
+          const secret = process.env["GG_CHECKOUT_WEBHOOK_SECRET"];
 
           if (!secret) {
             console.error("GG_CHECKOUT_WEBHOOK_SECRET não configurado.");
@@ -110,17 +110,12 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
             );
           }
 
-          const supabaseUrl =
-            process.env.SUPABASE_URL ??
-            process.env.VITE_SUPABASE_URL;
+          const supabaseUrl = process.env["SUPABASE_URL"] ?? process.env["VITE_SUPABASE_URL"];
 
-          const serviceRoleKey =
-            process.env.SUPABASE_SERVICE_ROLE_KEY;
+          const serviceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"];
 
           if (!supabaseUrl || !serviceRoleKey) {
-            console.error(
-              "SUPABASE_URL ou SUPABASE_SERVICE_ROLE_KEY não configurado.",
-            );
+            console.error("SUPABASE_URL ou SUPABASE_SERVICE_ROLE_KEY não configurado.");
 
             return new Response(
               JSON.stringify({
@@ -135,22 +130,17 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
             );
           }
 
-          const supabaseAdmin = createClient(
-            supabaseUrl,
-            serviceRoleKey,
-            {
-              auth: {
-                autoRefreshToken: false,
-                persistSession: false,
-              },
+          const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
+            auth: {
+              autoRefreshToken: false,
+              persistSession: false,
             },
-          );
+          });
 
-          const { data: usersData, error: usersError } =
-            await supabaseAdmin.auth.admin.listUsers({
-              page: 1,
-              perPage: 1000,
-            });
+          const { data: usersData, error: usersError } = await supabaseAdmin.auth.admin.listUsers({
+            page: 1,
+            perPage: 1000,
+          });
 
           if (usersError) {
             console.error(usersError);
@@ -168,17 +158,13 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
             );
           }
 
-          const user = usersData.users.find(
-            (item) =>
-              item.email?.trim().toLowerCase() === email,
-          );
+          const user = usersData.users.find((item) => item.email?.trim().toLowerCase() === email);
 
           if (!user) {
             return new Response(
               JSON.stringify({
                 error: "user_not_found",
-                message:
-                  "Nenhum usuário do Fluxo App corresponde ao e-mail da compra.",
+                message: "Nenhum usuário do Fluxo App corresponde ao e-mail da compra.",
               }),
               {
                 status: 404,
@@ -189,22 +175,11 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
             );
           }
 
-          const paidEvents = [
-            "pix.paid",
-            "card.paid",
-          ];
+          const paidEvents = ["pix.paid", "card.paid"];
 
-          const canceledEvents = [
-            "subscription.canceled",
-            "pix.refunded",
-            "card.refunded",
-          ];
+          const canceledEvents = ["subscription.canceled", "pix.refunded", "card.refunded"];
 
-          const pastDueEvents = [
-            "subscription.past_due",
-            "pix.failed",
-            "card.failed",
-          ];
+          const pastDueEvents = ["subscription.past_due", "pix.failed", "card.failed"];
 
           /*
            * PAGAMENTO APROVADO
@@ -228,37 +203,28 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
               );
             }
 
-            const subscriptionId =
-              payload.subscription?.id ??
-              null;
+            const subscriptionId = payload.subscription?.id ?? null;
 
             const currentPeriodEnd =
               payload.subscription?.current_period_end ??
               payload.subscription?.currentPeriodEnd ??
               null;
 
-            const { error } = await supabaseAdmin
-              .from("subscriptions")
-              .upsert(
-                {
-                  user_id: user.id,
-                  plan,
-                  status: "active",
-                  gateway_subscription_id:
-                    subscriptionId,
-                  gateway_customer_id:
-                    email,
-                  started_at:
-                    new Date().toISOString(),
-                  current_period_end:
-                    currentPeriodEnd,
-                  updated_at:
-                    new Date().toISOString(),
-                },
-                {
-                  onConflict: "user_id",
-                },
-              );
+            const { error } = await supabaseAdmin.from("subscriptions").upsert(
+              {
+                user_id: user.id,
+                plan,
+                status: "active",
+                gateway_subscription_id: subscriptionId,
+                gateway_customer_id: email,
+                started_at: new Date().toISOString(),
+                current_period_end: currentPeriodEnd,
+                updated_at: new Date().toISOString(),
+              },
+              {
+                onConflict: "user_id",
+              },
+            );
 
             if (error) {
               console.error(error);
@@ -285,8 +251,7 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
               .from("subscriptions")
               .update({
                 status: "canceled",
-                updated_at:
-                  new Date().toISOString(),
+                updated_at: new Date().toISOString(),
               })
               .eq("user_id", user.id);
 
@@ -315,8 +280,7 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
               .from("subscriptions")
               .update({
                 status: "past_due",
-                updated_at:
-                  new Date().toISOString(),
+                updated_at: new Date().toISOString(),
               })
               .eq("user_id", user.id);
 
@@ -350,10 +314,7 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
             },
           );
         } catch (error) {
-          console.error(
-            "GGCheckout webhook error:",
-            error,
-          );
+          console.error("GGCheckout webhook error:", error);
 
           return new Response(
             JSON.stringify({

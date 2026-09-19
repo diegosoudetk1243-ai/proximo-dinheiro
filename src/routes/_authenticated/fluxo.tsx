@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, CalendarRange, Plus, Wallet } from "lucide-react";
 
 import { AppShell, useMovementDialog } from "@/components/AppShell";
+import { DataLoadError } from "@/components/DataLoadError";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFluxo } from "@/lib/fluxo-data";
@@ -29,7 +30,7 @@ export const Route = createFileRoute("/_authenticated/fluxo")({
 });
 
 function Fluxo() {
-  const { data, isLoading } = useFluxo();
+  const { data, isLoading, error, refetch } = useFluxo();
   const { openAdd } = useMovementDialog();
   const [until, setUntil] = useState(addDaysISO(todayISO(), 90));
 
@@ -43,7 +44,9 @@ function Fluxo() {
     );
   }, [data, until]);
 
-  if (isLoading || !projection) return <Skeleton className="h-64 rounded-3xl" />;
+  if (isLoading) return <Skeleton className="h-64 rounded-3xl" />;
+  if (error) return <DataLoadError message={error.message} onRetry={() => void refetch()} />;
+  if (!projection) return <DataLoadError onRetry={() => void refetch()} />;
 
   let lastMonth = "";
 

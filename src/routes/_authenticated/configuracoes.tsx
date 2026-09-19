@@ -4,6 +4,7 @@ import { BadgeCheck, LogOut, UserRound, WalletCards } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell, useSignOut } from "@/components/AppShell";
+import { DataLoadError } from "@/components/DataLoadError";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,7 +32,7 @@ export const Route = createFileRoute("/_authenticated/configuracoes")({
 });
 
 function Configuracoes() {
-  const { data, isLoading } = useFluxo();
+  const { data, isLoading, error, refetch } = useFluxo();
   const updateProfile = useUpdateProfile();
   const updateBalance = useUpdateInitialBalance();
   const signOut = useSignOut();
@@ -45,7 +46,9 @@ function Configuracoes() {
     setBalance(Number(data.account?.initial_balance ?? 0));
   }, [data]);
 
-  if (isLoading || !data) return <Skeleton className="h-64 rounded-3xl" />;
+  if (isLoading) return <Skeleton className="h-64 rounded-3xl" />;
+  if (error) return <DataLoadError message={error.message} onRetry={() => void refetch()} />;
+  if (!data) return <DataLoadError onRetry={() => void refetch()} />;
 
   async function handleSave() {
     try {
