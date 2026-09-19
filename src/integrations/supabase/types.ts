@@ -42,65 +42,6 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "accounts_user_profile_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      billing_webhook_events: {
-        Row: {
-          attempt_count: number
-          error_code: string | null
-          event_type: string
-          external_event_id: string | null
-          external_payment_id: string | null
-          external_subscription_id: string | null
-          id: string
-          payload: Json
-          payload_hash: string
-          processed_at: string | null
-          processing_status: string
-          provider: string
-          provider_created_at: string | null
-          received_at: string
-        }
-        Insert: {
-          attempt_count?: number
-          error_code?: string | null
-          event_type: string
-          external_event_id?: string | null
-          external_payment_id?: string | null
-          external_subscription_id?: string | null
-          id?: string
-          payload: Json
-          payload_hash: string
-          processed_at?: string | null
-          processing_status?: string
-          provider?: string
-          provider_created_at?: string | null
-          received_at?: string
-        }
-        Update: {
-          attempt_count?: number
-          error_code?: string | null
-          event_type?: string
-          external_event_id?: string | null
-          external_payment_id?: string | null
-          external_subscription_id?: string | null
-          id?: string
-          payload?: Json
-          payload_hash?: string
-          processed_at?: string | null
-          processing_status?: string
-          provider?: string
-          provider_created_at?: string | null
-          received_at?: string
-        }
         Relationships: []
       }
       categories: {
@@ -125,15 +66,7 @@ export type Database = {
           type?: string
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "categories_user_profile_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -216,13 +149,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "recurring_account_owner_fkey"
-            columns: ["account_id", "user_id"]
-            isOneToOne: false
-            referencedRelation: "accounts"
-            referencedColumns: ["id", "user_id"]
-          },
-          {
             foreignKeyName: "recurring_transactions_account_id_fkey"
             columns: ["account_id"]
             isOneToOne: false
@@ -236,97 +162,46 @@ export type Database = {
             referencedRelation: "categories"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "recurring_user_profile_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       subscriptions: {
         Row: {
-          access_until: string | null
-          cancel_at_period_end: boolean
           created_at: string
           current_period_end: string | null
-          current_period_start: string | null
-          environment: string
-          external_customer_id: string | null
-          external_subscription_id: string | null
           gateway_customer_id: string | null
           gateway_subscription_id: string | null
           id: string
-          last_event_at: string | null
-          paddle_customer_id: string | null
-          paddle_subscription_id: string | null
           plan: string
-          price_id: string | null
-          product_id: string | null
-          provider: string
           started_at: string
           status: string
           updated_at: string
           user_id: string
         }
         Insert: {
-          access_until?: string | null
-          cancel_at_period_end?: boolean
           created_at?: string
           current_period_end?: string | null
-          current_period_start?: string | null
-          environment?: string
-          external_customer_id?: string | null
-          external_subscription_id?: string | null
           gateway_customer_id?: string | null
           gateway_subscription_id?: string | null
           id?: string
-          last_event_at?: string | null
-          paddle_customer_id?: string | null
-          paddle_subscription_id?: string | null
           plan?: string
-          price_id?: string | null
-          product_id?: string | null
-          provider?: string
           started_at?: string
           status?: string
           updated_at?: string
           user_id: string
         }
         Update: {
-          access_until?: string | null
-          cancel_at_period_end?: boolean
           created_at?: string
           current_period_end?: string | null
-          current_period_start?: string | null
-          environment?: string
-          external_customer_id?: string | null
-          external_subscription_id?: string | null
           gateway_customer_id?: string | null
           gateway_subscription_id?: string | null
           id?: string
-          last_event_at?: string | null
-          paddle_customer_id?: string | null
-          paddle_subscription_id?: string | null
           plan?: string
-          price_id?: string | null
-          product_id?: string | null
-          provider?: string
           started_at?: string
           status?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "subscriptions_user_profile_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       transactions: {
         Row: {
@@ -380,13 +255,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "transactions_account_owner_fkey"
-            columns: ["account_id", "user_id"]
-            isOneToOne: false
-            referencedRelation: "accounts"
-            referencedColumns: ["id", "user_id"]
-          },
-          {
             foreignKeyName: "transactions_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
@@ -400,20 +268,6 @@ export type Database = {
             referencedRelation: "recurring_transactions"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "transactions_recurrence_owner_fkey"
-            columns: ["recurrence_id", "user_id"]
-            isOneToOne: false
-            referencedRelation: "recurring_transactions"
-            referencedColumns: ["id", "user_id"]
-          },
-          {
-            foreignKeyName: "transactions_user_profile_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
     }
@@ -421,59 +275,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      has_paid_access: { Args: never; Returns: boolean }
-      process_paddle_subscription_event: {
-        Args: {
-          _cancel_at_period_end: boolean
-          _current_period_end: string
-          _current_period_start: string
-          _environment: string
-          _event_type: string
-          _external_customer_id: string
-          _external_event_id: string
-          _external_subscription_id: string
-          _payload: Json
-          _payload_hash: string
-          _plan: string
-          _price_id: string
-          _product_id: string
-          _provider_created_at: string
-          _status: string
-          _user_id: string
-        }
-        Returns: string
-      }
-      register_billing_webhook_event: {
-        Args: {
-          _event_type: string
-          _external_event_id: string
-          _external_payment_id: string
-          _external_subscription_id: string
-          _payload: Json
-          _payload_hash: string
-          _provider_created_at: string
-        }
-        Returns: {
-          attempts: number
-          event_id: string
-          is_new: boolean
-        }[]
-      }
-      register_ignored_billing_webhook_event: {
-        Args: {
-          _error_code: string
-          _event_type: string
-          _external_payment_id: string
-          _payload: Json
-          _payload_hash: string
-          _provider_created_at: string
-        }
-        Returns: {
-          attempts: number
-          event_id: string
-          is_new: boolean
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never

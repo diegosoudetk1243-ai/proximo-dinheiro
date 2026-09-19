@@ -22,55 +22,6 @@
       "when": 1789419333518,
       "tag": "0002_create_subscriptions",
       "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1789761769174,
-      "tag": "0003_secure_subscription_access_and_webhook_audit",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1789761805703,
-      "tag": "0004_register_billing_webhook_event",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1789761884688,
-      "tag": "0005_normalize_optional_webhook_identifiers",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1789761994139,
-      "tag": "0006_atomically_audit_unprocessed_ggcheckout_events",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1789762027516,
-      "tag": "0007_make_subscription_access_check_invoker_safe",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1789764475156,
-      "tag": "0008_extend_subscriptions_for_paddle",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "7",
-      "when": 1789764528731,
-      "tag": "0009_process_paddle_subscription_events",
-      "breakpoints": true
     }
   ]
 }
