@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { AppShell, useMovementDialog } from "@/components/AppShell";
+import { DataLoadError } from "@/components/DataLoadError";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFluxo } from "@/lib/fluxo-data";
@@ -38,7 +39,7 @@ export const Route = createFileRoute("/_authenticated/inicio")({
 const HORIZONS = [7, 30, 90] as const;
 
 function Dashboard() {
-  const { data, isLoading, error } = useFluxo();
+  const { data, isLoading, error, refetch } = useFluxo();
   const { openAdd } = useMovementDialog();
   const navigate = useNavigate();
   const [days, setDays] = useState<number>(30);
@@ -57,7 +58,7 @@ function Dashboard() {
     navigate({ to: "/onboarding", replace: true });
   }
 
-  if (isLoading || !projection) {
+  if (isLoading) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-40 rounded-3xl" />
@@ -67,7 +68,11 @@ function Dashboard() {
   }
 
   if (error) {
-    return <p className="text-sm text-destructive">{(error as Error).message}</p>;
+    return <DataLoadError message={error.message} onRetry={() => void refetch()} />;
+  }
+
+  if (!projection) {
+    return <DataLoadError onRetry={() => void refetch()} />;
   }
 
   const next = projection.future.slice(0, 6);

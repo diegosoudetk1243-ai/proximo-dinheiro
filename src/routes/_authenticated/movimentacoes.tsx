@@ -4,6 +4,7 @@ import { ArrowDownLeft, ArrowUpRight, Pencil, Plus, Trash2 } from "lucide-react"
 import { toast } from "sonner";
 
 import { AppShell, useMovementDialog } from "@/components/AppShell";
+import { DataLoadError } from "@/components/DataLoadError";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -38,7 +39,7 @@ type PeriodFilter = "next" | "past" | "all";
 type TypeFilter = "all" | "income" | "expense";
 
 function Movimentacoes() {
-  const { data, isLoading } = useFluxo();
+  const { data, isLoading, error, refetch } = useFluxo();
   const { openAdd, openEdit } = useMovementDialog();
   const removeTransaction = useDeleteTransaction();
   const skipOccurrence = useSkipOccurrence();
@@ -87,6 +88,7 @@ function Movimentacoes() {
   }
 
   if (isLoading) return <Skeleton className="h-64 rounded-3xl" />;
+  if (error) return <DataLoadError message={error.message} onRetry={() => void refetch()} />;
 
   let lastMonth = "";
 

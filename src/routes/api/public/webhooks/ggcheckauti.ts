@@ -53,7 +53,7 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const secret = process.env.GG_CHECKOUT_WEBHOOK_SECRET;
+          const secret = process.env["GG_CHECKOUT_WEBHOOK_SECRET"];
 
           if (!secret) {
             console.error("GG_CHECKOUT_WEBHOOK_SECRET não configurado.");
@@ -111,11 +111,11 @@ export const Route = createFileRoute("/api/public/webhooks/ggcheckauti")({
           }
 
           const supabaseUrl =
-            process.env.SUPABASE_URL ??
-            process.env.VITE_SUPABASE_URL;
+            process.env["SUPABASE_URL"] ??
+            process.env["VITE_SUPABASE_URL"];
 
           const serviceRoleKey =
-            process.env.SUPABASE_SERVICE_ROLE_KEY;
+            process.env["SUPABASE_SERVICE_ROLE_KEY"];
 
           if (!supabaseUrl || !serviceRoleKey) {
             console.error(
